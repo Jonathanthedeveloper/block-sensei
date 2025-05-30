@@ -10,6 +10,7 @@ import EnokiWalletProvider from "./EnokiWalletProvider";
 const { networkConfig } = createNetworkConfig({
   testnet: { url: getFullnodeUrl("testnet") },
   mainnet: { url: getFullnodeUrl("mainnet") },
+  devnet: { url: getFullnodeUrl("devnet") },
 });
 
 export default function SuiProvider({
@@ -18,7 +19,7 @@ export default function SuiProvider({
   children: React.ReactNode;
 }) {
   return (
-    <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+    <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
       <EnokiWalletProvider />
       <WalletProvider autoConnect>{children}</WalletProvider>
     </SuiClientProvider>

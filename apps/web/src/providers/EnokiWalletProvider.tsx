@@ -9,16 +9,11 @@ export default function EnokiWalletProvider() {
     if (!isEnokiNetwork(network)) return;
 
     const { unregister } = registerEnokiWallets({
-      apiKey: "YOUR_PUBLIC_ENOKI_API_KEY",
+      apiKey: import.meta.env.VITE_ENOKI_API_KEY,
       providers: {
         google: {
-          clientId: "YOUR_GOOGLE_CLIENT_ID",
-        },
-        facebook: {
-          clientId: "YOUR_FACEBOOK_CLIENT_ID",
-        },
-        twitch: {
-          clientId: "YOUR_TWITCH_CLIENT_ID",
+          clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          redirectUrl: import.meta.env.VITE_GOOGLE_REDIRECT_URL,
         },
       },
       client,
