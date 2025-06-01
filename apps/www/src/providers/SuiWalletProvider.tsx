@@ -21,9 +21,11 @@ export default function SuiWalletProvider({
   children: React.ReactNode;
 }) {
   return (
-    <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
-      <EnokiWalletProvider />
-      <WalletProvider autoConnect>{children}</WalletProvider>
+    <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+      <WalletProvider autoConnect>
+        <EnokiWalletProvider />
+        {children}
+      </WalletProvider>
     </SuiClientProvider>
   );
 }
@@ -32,14 +34,22 @@ function EnokiWalletProvider() {
   const { client, network } = useSuiClientContext();
 
   useEffect(() => {
-    if (!isEnokiNetwork(network)) return;
+    console.log("Current network:", network); // Debug log
+    console.log("Is Enoki network:", isEnokiNetwork(network)); // Debug log
+    console.log("API Key:", import.meta.env.VITE_ENOKI_API_KEY); // Debug log
+    console.log("Google Client ID:", import.meta.env.VITE_GOOGLE_CLIENT_ID); // Debug log
 
+    if (!isEnokiNetwork(network)) {
+      console.warn(
+        `Network ${network} is not supported by Enoki. Use testnet or mainnet.`
+      );
+      return;
+    }
     const { unregister } = registerEnokiWallets({
       apiKey: import.meta.env.VITE_ENOKI_API_KEY,
       providers: {
         google: {
           clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-          redirectUrl: import.meta.env.VITE_GOOGLE_REDIRECT_URL,
         },
       },
       client,
