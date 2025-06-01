@@ -50,6 +50,7 @@ let ClansService = class ClansService {
                     _count: {
                         select: {
                             followers: true,
+                            missions: true,
                         },
                     },
                 },
@@ -86,9 +87,11 @@ let ClansService = class ClansService {
                         },
                     },
                 },
+                missions: true,
                 _count: {
                     select: {
                         followers: true,
+                        missions: true,
                     },
                 },
             },

@@ -26,28 +26,31 @@ export interface IUpdateClan {
 
 // Mission types
 export interface ICreateMissionWithRounds {
-  name: string;
-  description?: string;
+  title: string;
+  brief?: string;
   clan_id: string;
-  start_date?: string;
-  end_date?: string;
-  rounds: ICreateMissionRound[];
+  mission_rounds: ICreateMissionRound[];
 }
 
 export interface ICreateMissionRound {
-  name: string;
-  description?: string;
-  round_number: number;
-  start_date?: string;
-  end_date?: string;
-  quiz?: ICreateQuiz;
-  reward?: ICreateReward;
+  title: string;
+  welcome_message?: string;
+  introduction: number;
+  content?: string;
+  quest: ICreateQuest;
+}
+
+export interface ICreateQuest {
+  description: string;
+  type: string;
+  reward: ICreateReward;
+  quiz?: ICreateQuiz[];
 }
 
 export interface ICreateQuiz {
-  title: string;
-  description?: string;
-  questions: any[]; // You might want to define a proper question type
+  question: string;
+  options: string[];
+  answer: string;
 }
 
 export interface ICreateReward {

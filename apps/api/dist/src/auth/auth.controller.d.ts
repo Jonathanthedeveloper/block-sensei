@@ -28,11 +28,11 @@ export declare class AuthController {
             id: string;
             created_at: Date;
             updated_at: Date;
-            creator_id: string;
             logo_url: string;
             description: string | null;
             x_url: string | null;
             website_url: string | null;
+            creator_id: string;
         }[];
         joined_clans: {
             id: string;

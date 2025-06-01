@@ -50,6 +50,7 @@ export class ClansService {
           _count: {
             select: {
               followers: true,
+              missions: true,
             },
           },
         },
@@ -88,9 +89,11 @@ export class ClansService {
             },
           },
         },
+        missions: true,
         _count: {
           select: {
             followers: true,
+            missions: true,
           },
         },
       },

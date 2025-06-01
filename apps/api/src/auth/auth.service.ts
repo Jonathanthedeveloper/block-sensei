@@ -5,12 +5,14 @@ import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import crypto from 'node:crypto';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
+import { SuiService } from 'src/sui/sui.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly suiService: SuiService,
   ) {}
 
   async login(data: LoginDto) {
@@ -120,6 +122,10 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+
+    const balance = await this.suiService.getTokenBalance(user?.wallet_address);
+
+    user['block_balance'] = balance.formattedBalance;
 
     return user;
   }

@@ -131,4 +131,9 @@ export class MissionsController {
   getUserCompletedMissions(@Req() request: any) {
     return this.missionsService.getUserCompletedMissions(request.user.id);
   }
+
+  @Get('users/participated')
+  getUserParticipatedMissions(@Req() request: any) {
+    return this.missionsService.getUserParticipatedMissions(request.user.id);
+  }
 }

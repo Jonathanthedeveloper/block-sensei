@@ -74,6 +74,9 @@ let MissionsController = class MissionsController {
     getUserCompletedMissions(request) {
         return this.missionsService.getUserCompletedMissions(request.user.id);
     }
+    getUserParticipatedMissions(request) {
+        return this.missionsService.getUserParticipatedMissions(request.user.id);
+    }
 };
 exports.MissionsController = MissionsController;
 __decorate([
@@ -183,6 +186,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], MissionsController.prototype, "getUserCompletedMissions", null);
+__decorate([
+    (0, common_1.Get)('users/participated'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MissionsController.prototype, "getUserParticipatedMissions", null);
 exports.MissionsController = MissionsController = __decorate([
     (0, common_1.Controller)({
         path: 'missions',

@@ -1,14 +1,15 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Home, Target, Users, Trophy, User } from "lucide-react";
 import Logo from "./logo";
 import coinSrc from "@/assets/coin.png";
+import { Target, Users, Trophy, User, Monitor } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
+  // { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Lessons", href: "/dashboard/missions", icon: Target },
   { name: "Clans", href: "/dashboard/clans", icon: Users },
   { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
   { name: "Profile", href: "/dashboard/profile", icon: User },
+  { name: "Studio", href: "/dashboard/studio", icon: Monitor },
 ];
 
 export default function DashboardLayout() {

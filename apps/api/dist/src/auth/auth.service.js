@@ -17,12 +17,15 @@ const common_1 = require("@nestjs/common");
 const nestjs_prisma_1 = require("nestjs-prisma");
 const jwt_1 = require("@nestjs/jwt");
 const node_crypto_1 = __importDefault(require("node:crypto"));
+const sui_service_1 = require("../sui/sui.service");
 let AuthService = class AuthService {
     prisma;
     jwtService;
-    constructor(prisma, jwtService) {
+    suiService;
+    constructor(prisma, jwtService, suiService) {
         this.prisma = prisma;
         this.jwtService = jwtService;
+        this.suiService = suiService;
     }
     async login(data) {
         let user = await this.prisma.user.findUnique({
@@ -114,6 +117,8 @@ let AuthService = class AuthService {
         if (!user) {
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         }
+        const balance = await this.suiService.getTokenBalance(user?.wallet_address);
+        user['block_balance'] = balance.formattedBalance;
         return user;
     }
 };
@@ -121,6 +126,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [nestjs_prisma_1.PrismaService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        sui_service_1.SuiService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

@@ -173,6 +173,7 @@ let MissionsService = class MissionsService {
                     include: {
                         quest: {
                             include: {
+                                quiz: true,
                                 reward: true,
                             },
                         },
@@ -852,6 +853,41 @@ let MissionsService = class MissionsService {
             where: {
                 user_id: userId,
                 status: 'COMPLETED',
+            },
+            include: {
+                mission: {
+                    include: {
+                        clan: {
+                            select: {
+                                id: true,
+                                name: true,
+                                logo_url: true,
+                            },
+                        },
+                        mission_rounds: {
+                            include: {
+                                quest: {
+                                    include: {
+                                        reward: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                round_progress: {
+                    include: {
+                        mission_round: true,
+                    },
+                },
+            },
+        });
+        return participations;
+    }
+    async getUserParticipatedMissions(userId) {
+        const participations = await this.prisma.missionParticipation.findMany({
+            where: {
+                user_id: userId,
             },
             include: {
                 mission: {

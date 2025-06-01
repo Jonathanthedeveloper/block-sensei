@@ -5,35 +5,36 @@ export declare class ClansController {
     private readonly clansService;
     constructor(clansService: ClansService);
     createClan(createClanDto: CreateClanDto, request: any): Promise<{
-        name: string;
         id: string;
-        created_at: Date;
-        updated_at: Date;
+        name: string;
+        creator_id: string;
         logo_url: string;
         description: string | null;
         x_url: string | null;
         website_url: string | null;
-        creator_id: string;
+        created_at: Date;
+        updated_at: Date;
     }>;
     getAllClans(page?: string, limit?: string): Promise<{
         clans: ({
-            _count: {
-                followers: number;
-            };
             creator: {
                 id: string;
                 wallet_address: string;
             };
+            _count: {
+                followers: number;
+                missions: number;
+            };
         } & {
-            name: string;
             id: string;
-            created_at: Date;
-            updated_at: Date;
+            name: string;
+            creator_id: string;
             logo_url: string;
             description: string | null;
             x_url: string | null;
             website_url: string | null;
-            creator_id: string;
+            created_at: Date;
+            updated_at: Date;
         })[];
         meta: {
             total: number;
@@ -43,9 +44,6 @@ export declare class ClansController {
         };
     }>;
     getClanById(id: string): Promise<{
-        _count: {
-            followers: number;
-        };
         creator: {
             id: string;
             wallet_address: string;
@@ -62,27 +60,41 @@ export declare class ClansController {
             user_id: string;
             clan_id: string;
         })[];
+        missions: {
+            id: string;
+            description: string | null;
+            created_at: Date;
+            updated_at: Date;
+            clan_id: string;
+            title: string;
+            brief: string;
+            status: import("@prisma/client").$Enums.MissionStatus;
+        }[];
+        _count: {
+            followers: number;
+            missions: number;
+        };
     } & {
-        name: string;
         id: string;
-        created_at: Date;
-        updated_at: Date;
+        name: string;
+        creator_id: string;
         logo_url: string;
         description: string | null;
         x_url: string | null;
         website_url: string | null;
-        creator_id: string;
+        created_at: Date;
+        updated_at: Date;
     }>;
     updateClan(id: string, updateClanDto: UpdateClanDto, request: any): Promise<{
-        name: string;
         id: string;
-        created_at: Date;
-        updated_at: Date;
+        name: string;
+        creator_id: string;
         logo_url: string;
         description: string | null;
         x_url: string | null;
         website_url: string | null;
-        creator_id: string;
+        created_at: Date;
+        updated_at: Date;
     }>;
     deleteClan(id: string, request: any): Promise<{
         message: string;
@@ -98,8 +110,8 @@ export declare class ClansController {
     getClanFollowers(clanId: string, page?: string, limit?: string): Promise<{
         followers: {
             id: string;
-            wallet_address: string;
             created_at: Date;
+            wallet_address: string;
         }[];
         pagination: {
             total: number;
@@ -110,23 +122,23 @@ export declare class ClansController {
     }>;
     getUserFollowedClans(request: any, page?: string, limit?: string): Promise<{
         clans: ({
-            _count: {
-                followers: number;
-            };
             creator: {
                 id: string;
                 wallet_address: string;
             };
+            _count: {
+                followers: number;
+            };
         } & {
-            name: string;
             id: string;
-            created_at: Date;
-            updated_at: Date;
+            name: string;
+            creator_id: string;
             logo_url: string;
             description: string | null;
             x_url: string | null;
             website_url: string | null;
-            creator_id: string;
+            created_at: Date;
+            updated_at: Date;
         })[];
         pagination: {
             total: number;
@@ -137,23 +149,23 @@ export declare class ClansController {
     }>;
     getUserCreatedClans(request: any, page?: string, limit?: string): Promise<{
         clans: ({
-            _count: {
-                followers: number;
-            };
             creator: {
                 id: string;
                 wallet_address: string;
             };
+            _count: {
+                followers: number;
+            };
         } & {
-            name: string;
             id: string;
-            created_at: Date;
-            updated_at: Date;
+            name: string;
+            creator_id: string;
             logo_url: string;
             description: string | null;
             x_url: string | null;
             website_url: string | null;
-            creator_id: string;
+            created_at: Date;
+            updated_at: Date;
         })[];
         pagination: {
             total: number;

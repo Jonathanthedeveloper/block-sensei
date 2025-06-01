@@ -2,10 +2,12 @@ import { PrismaService } from 'nestjs-prisma';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
+import { SuiService } from 'src/sui/sui.service';
 export declare class AuthService {
     private readonly prisma;
     private readonly jwtService;
-    constructor(prisma: PrismaService, jwtService: JwtService);
+    private readonly suiService;
+    constructor(prisma: PrismaService, jwtService: JwtService, suiService: SuiService);
     login(data: LoginDto): Promise<{
         session: {
             access_token: string;
@@ -30,11 +32,11 @@ export declare class AuthService {
             id: string;
             created_at: Date;
             updated_at: Date;
-            creator_id: string;
             logo_url: string;
             description: string | null;
             x_url: string | null;
             website_url: string | null;
+            creator_id: string;
         }[];
         joined_clans: {
             id: string;

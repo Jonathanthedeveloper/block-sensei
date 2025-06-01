@@ -16,6 +16,7 @@ exports.SuiModule = SuiModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         providers: [sui_service_1.SuiService],
+        exports: [sui_service_1.SuiService],
     })
 ], SuiModule);
 //# sourceMappingURL=sui.module.js.map
