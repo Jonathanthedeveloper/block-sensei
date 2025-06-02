@@ -1,0 +1,195 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum QuestType {
+  QUIZ
+  VISIT_SITE
+  WATCH_VIDEO
+  SOCIAL_ACTION
+  BLOCKCHAIN_ACTION
+  USER_CONTENT
+  REFERRALS
+  TRACKER
+}
+
+enum MissionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id                     String                 @id @default(cuid())
+  wallet_address         String                 @unique
+  created_at             DateTime               @default(now())
+  updated_at             DateTime               @updatedAt
+  refresh_tokens         RefreshToken?
+  created_clans          Clan[]
+  joined_clans           UserClan[]
+  mission_participations MissionParticipation[]
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  user       User     @relation(fields: [user_id], references: [id])
+  token      String   @unique
+  expires_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Clan {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  creator_id  String
+  creator     User       @relation(fields: [creator_id], references: [id])
+  logo_url    String
+  description String?    @default("")
+  x_url       String?
+  website_url String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  followers   UserClan[]
+  missions    Mission[]
+}
+
+model UserClan {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  clan_id    String
+  clan       Clan     @relation(fields: [clan_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, clan_id])
+}
+
+model Mission {
+  id             String                 @id @default(cuid())
+  title          String
+  brief          String
+  description    String?
+  status         MissionStatus          @default(INACTIVE)
+  clan_id        String
+  clan           Clan?                  @relation(fields: [clan_id], references: [id])
+  mission_rounds MissionRound[]
+  participations MissionParticipation[]
+  created_at     DateTime               @default(now())
+  updated_at     DateTime               @updatedAt
+}
+
+model MissionRound {
+  id              String          @id @default(cuid())
+  mission_id      String
+  mission         Mission         @relation(fields: [mission_id], references: [id])
+  quest_id        String?         @unique
+  quest           Quest?          @relation(fields: [quest_id], references: [id])
+  title           String
+  content         String
+  welcome_message String
+  introduction    String
+  round_progress  RoundProgress[]
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+}
+
+model Reward {
+  id         String   @id @default(cuid())
+  amount     Float    @default(0)
+  token      String
+  quest      Quest?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Quest {
+  id            String        @id @default(cuid())
+  type          QuestType
+  description   String
+  reward_id     String        @unique
+  reward        Reward        @relation(fields: [reward_id], references: [id])
+  mission_round MissionRound?
+  quiz          QuestQuiz[]
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+}
+
+model QuestQuiz {
+  id            String        @id @default(cuid())
+  question      String
+  options       String
+  answer        String
+  created_at    DateTime      @default(now())
+  updated_At    DateTime      @updatedAt
+  quest_id      String
+  quest         Quest         @relation(fields: [quest_id], references: [id])
+  quest_answers QuestAnswer[]
+}
+
+enum MissionParticipationStatus {
+  STARTED
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum RoundCompletionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+model MissionParticipation {
+  id             String                     @id @default(cuid())
+  user_id        String
+  user           User                       @relation(fields: [user_id], references: [id])
+  mission_id     String
+  mission        Mission                    @relation(fields: [mission_id], references: [id])
+  status         MissionParticipationStatus @default(STARTED)
+  started_at     DateTime                   @default(now())
+  completed_at   DateTime?
+  round_progress RoundProgress[]
+  created_at     DateTime                   @default(now())
+  updated_at     DateTime                   @updatedAt
+
+  @@unique([user_id, mission_id])
+}
+
+model RoundProgress {
+  id               String                @id @default(cuid())
+  participation_id String
+  participation    MissionParticipation  @relation(fields: [participation_id], references: [id])
+  mission_round_id String
+  mission_round    MissionRound          @relation(fields: [mission_round_id], references: [id])
+  status           RoundCompletionStatus @default(NOT_STARTED)
+  started_at       DateTime?
+  completed_at     DateTime?
+  quest_answers    QuestAnswer[]
+  created_at       DateTime              @default(now())
+  updated_at       DateTime              @updatedAt
+
+  @@unique([participation_id, mission_round_id])
+}
+
+model QuestAnswer {
+  id                String        @id @default(cuid())
+  round_progress_id String
+  round_progress    RoundProgress @relation(fields: [round_progress_id], references: [id])
+  quest_quiz_id     String
+  quest_quiz        QuestQuiz     @relation(fields: [quest_quiz_id], references: [id])
+  user_answer       String
+  is_correct        Boolean
+  answered_at       DateTime      @default(now())
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  @@unique([round_progress_id, quest_quiz_id])
+}
