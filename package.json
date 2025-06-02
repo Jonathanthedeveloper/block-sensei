@@ -15,7 +15,8 @@
     "start:prod": "pnpm --filter=api start:prod",
     "deploy:api": "pnpm --filter=api prisma:deploy && pnpm --filter=api start:prod",
     "prisma:generate": "pnpm --filter=api exec prisma generate",
-    "prisma:migrate": "pnpm --filter=api exec prisma migrate deploy"
+    "prisma:migrate": "pnpm --filter=api exec prisma migrate deploy",
+    "prisma:push": "pnpm --filter=api exec prisma db push"
   },
   "keywords": [],
   "author": "",
