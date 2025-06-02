@@ -5,6 +5,7 @@ export const useStartMission = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["startMission"],
     mutationFn: (id: string) => startMission(id),
     onSuccess: (_, missionId) => {
       // Invalidate mission progress and user missions

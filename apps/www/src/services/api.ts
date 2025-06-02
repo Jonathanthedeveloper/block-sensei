@@ -25,16 +25,17 @@ export async function refreshAccessToken(data: IRefreshToken) {
   return response.data;
 }
 
+
+export type Profile = Prisma.UserGetPayload<{
+  include: {
+    created_clans: true;
+    joined_clans: true;
+    mission_participations: true;
+  };
+}> & { block_balance: number };
+
 export async function getCurrentUser() {
-  const response = await api.get<
-    Prisma.UserGetPayload<{
-      include: {
-        created_clans: true;
-        joined_clans: true;
-        mission_participations: true;
-      };
-    }> & { block_balance: number }
-  >("auth/me");
+  const response = await api.get<Profile>("auth/me");
   return response.data;
 }
 

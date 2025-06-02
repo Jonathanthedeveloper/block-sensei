@@ -1,47 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "../components/ui/Card";
-import { mockLeaderboard } from "../data/mockData";
-import { LeaderboardEntry } from "../types";
-import { useAuth } from "../context/AuthContext";
-import { formatAddress, formatNumber } from "../lib/utils";
-import Avatar from "../components/ui/Avatar";
-import Badge from "../components/ui/Badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { LeaderboardEntry } from "@/types";
+import { formatAddress, formatNumber } from "@/lib/utils";
+import Avatar from "@/components/ui/Avatar";
+import Badge from "@/components/ui/Badge";
 import { Trophy, Medal, Search } from "lucide-react";
 import * as Tabs from "@radix-ui/react-tabs";
 
 export default function LeaderboardPage() {
-  const { user } = useAuth();
-  const [leaderboard, setLeaderboard] = useState(mockLeaderboard);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredLeaderboard, setFilteredLeaderboard] =
     useState(mockLeaderboard);
   const [filter, setFilter] = useState("all"); // all, clan, friends
-
-  useEffect(() => {
-    let filtered = [...leaderboard];
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (entry) =>
-          entry.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          entry.wallet_address.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply tab filter
-    if (filter === "clan" && user) {
-      filtered = filtered.filter((entry) => entry.clan?.id === user.clan?.id);
-    }
-
-    setFilteredLeaderboard(filtered);
-  }, [searchTerm, filter, leaderboard, user]);
 
   return null;
 

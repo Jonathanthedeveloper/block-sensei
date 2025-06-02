@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Card, CardContent } from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import Badge from "../components/ui/Badge";
-import Progress from "../components/ui/Progress";
+import { Card, CardContent } from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+import Progress from "@/components/ui/Progress";
 import {
   ArrowLeft,
   CheckCircle,
@@ -17,17 +17,18 @@ import {
   Target,
   Lock,
 } from "lucide-react";
-import { cn } from "../lib/utils";
-import { useGetMissionById, useGetUserMissionProgress } from "@/features";
+import { cn } from "@/lib/utils";
+import {
+  useGetMissionById,
+  useGetUserMissionProgress,
+  useStartRound,
+} from "@/features";
 
 export default function QuestPage() {
   const { missionId } = useParams<{ missionId: string }>();
-  const navigate = useNavigate();
 
   const { data: mission, isPending } = useGetMissionById(missionId);
   const { data: missionProgress } = useGetUserMissionProgress(missionId);
-
-  console.log(missionProgress);
 
   const missionDuration: string = useMemo(() => {
     if (
@@ -82,10 +83,6 @@ export default function QuestPage() {
       </div>
     );
   }
-
-  const handleStartRound = (roundId: string) => {
-    navigate(`/missions/${missionId}/rounds/${roundId}`);
-  };
 
   return (
     <div className="space-y-6">
@@ -206,109 +203,160 @@ export default function QuestPage() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="grid gap-4"
       >
-        {mission?.mission_rounds.map((round, index) => {
-          const isLocked = index > currentRoundIndex;
-          const isCompleted = index < currentRoundIndex;
-          const isCurrent = index === currentRoundIndex;
-
-          return (
-            <motion.div
-              key={round.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <Card
-                className={cn(
-                  "relative overflow-hidden transition-all duration-300",
-                  isLocked ? "opacity-75 grayscale" : "hover:shadow-lg",
-                  isCurrent &&
-                    "border-2 border-primary-500 dark:border-primary-400",
-                  isCompleted && "bg-primary-50 dark:bg-primary-900/20"
-                )}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={cn(
-                        "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center",
-                        isCompleted
-                          ? "bg-primary-100 dark:bg-primary-900"
-                          : isCurrent
-                            ? "bg-secondary-100 dark:bg-secondary-900"
-                            : "bg-gray-100 dark:bg-gray-800"
-                      )}
-                    >
-                      {isCompleted ? (
-                        <CheckCircle className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                      ) : isLocked ? (
-                        <Lock className="w-6 h-6 text-gray-400 dark:text-gray-600" />
-                      ) : (
-                        <span className="text-xl font-bold text-secondary-600 dark:text-secondary-400">
-                          {index + 1}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">
-                          {round.title}
-                        </h3>
-                        {round.quest && (
-                          <Badge variant="accent" size="sm">
-                            <Gift className="w-3 h-3 mr-1" />
-                            {round.quest.reward.amount}{" "}
-                            {round.quest.reward.token}
-                          </Badge>
-                        )}
-                      </div>
-
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        {round.introduction}
-                      </p>
-
-                      <div className="flex items-center gap-4 text-sm">
-                        <Badge variant="secondary" size="sm">
-                          {round.quest?.type.replace("_", " ")}
-                        </Badge>
-                        <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
-                          15 min
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex-shrink-0">
-                      {isCompleted ? (
-                        <Button variant="ghost" size="sm" disabled>
-                          Completed
-                        </Button>
-                      ) : isCurrent ? (
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          onClick={() => handleStartRound(round.id)}
-                        >
-                          Start Round
-                        </Button>
-                      ) : (
-                        <Button variant="outline" size="sm" disabled={isLocked}>
-                          {isLocked ? "Locked" : "Start"}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-
-                {isCurrent && (
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500" />
-                )}
-              </Card>
-            </motion.div>
-          );
-        })}
+        {mission?.mission_rounds.map((round, index) => (
+          <RoundCard
+            key={round.id}
+            round={round}
+            isLocked={index > currentRoundIndex}
+            isCompleted={index < currentRoundIndex}
+            isCurrent={index === currentRoundIndex}
+            index={index}
+          />
+        ))}
       </motion.div>
     </div>
+  );
+}
+
+function RoundCard({
+  round,
+  isLocked,
+  isCompleted,
+  isCurrent,
+  index,
+}: {
+  round: any;
+  isLocked: boolean;
+  isCompleted: boolean;
+  isCurrent: boolean;
+  index: number;
+}) {
+  const navigate = useNavigate();
+  const startRound = useStartRound();
+  const { missionId } = useParams<{ missionId: string }>();
+  const { data: missionProgress } = useGetUserMissionProgress(missionId);
+
+  // Find the progress for this specific round
+  const roundProgress = missionProgress?.round_progress?.find(
+    (progress) => progress.mission_round_id === round.id
+  );
+
+  // Determine round status
+  const roundStatus = roundProgress?.status || "NOT_STARTED";
+  const isRoundStarted =
+    roundStatus === "IN_PROGRESS" || roundStatus === "COMPLETED";
+  const isRoundCompleted = roundStatus === "COMPLETED";
+  const canStartRound = !isLocked && !isRoundStarted && !isRoundCompleted;
+
+  function handleStartRound() {
+    if (canStartRound) {
+      startRound.mutate(round.id, {
+        onSuccess: () => {
+          navigate(`/missions/${missionId}/rounds/${round.id}`);
+        },
+        onError: (error) => {
+          console.error("Failed to start round:", error);
+        },
+      });
+    } else if (isRoundStarted) {
+      navigate(`/missions/${missionId}/rounds/${round.id}`);
+    }
+  }
+
+  return (
+    <motion.div
+      key={round.id}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+    >
+      <Card
+        className={cn(
+          "relative overflow-hidden transition-all duration-300",
+          isLocked ? "opacity-75 grayscale" : "hover:shadow-lg",
+          isCurrent && "border-2 border-primary-500 dark:border-primary-400",
+          isCompleted && "bg-primary-50 dark:bg-primary-900/20"
+        )}
+      >
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div
+              className={cn(
+                "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center",
+                isCompleted
+                  ? "bg-primary-100 dark:bg-primary-900"
+                  : isCurrent
+                    ? "bg-secondary-100 dark:bg-secondary-900"
+                    : "bg-gray-100 dark:bg-gray-800"
+              )}
+            >
+              {isCompleted ? (
+                <CheckCircle className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              ) : isLocked ? (
+                <Lock className="w-6 h-6 text-gray-400 dark:text-gray-600" />
+              ) : (
+                <span className="text-xl font-bold text-secondary-600 dark:text-secondary-400">
+                  {index + 1}
+                </span>
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">
+                  {round.title}
+                </h3>
+                {round.quest && (
+                  <Badge variant="accent" size="sm">
+                    <Gift className="w-3 h-3 mr-1" />
+                    {round.quest.reward.amount} {round.quest.reward.token}
+                  </Badge>
+                )}
+              </div>
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                {round.introduction}
+              </p>
+
+              <div className="flex items-center gap-4 text-sm">
+                <Badge variant="secondary" size="sm">
+                  {round.quest?.type.replace("_", " ")}
+                </Badge>
+                <span className="text-gray-500 dark:text-gray-400 flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  15 min
+                </span>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0">
+              {isCompleted ? (
+                <Button variant="ghost" size="sm" disabled>
+                  Completed
+                </Button>
+              ) : isCurrent ? (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleStartRound}
+                  isLoading={startRound.isPending}
+                  disabled={startRound.isPending}
+                >
+                  {isRoundStarted ? "Resume Round" : "Start Round"}
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm" disabled={isLocked}>
+                  {isLocked ? "Locked" : "Start"}
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardContent>
+
+        {isCurrent && (
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500" />
+        )}
+      </Card>
+    </motion.div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -7,7 +7,11 @@ import Progress from "@/components/ui/Progress";
 import Button from "@/components/ui/Button";
 import { mockClans } from "@/data/mockData";
 import { Search, ArrowUpDown, Trophy, Clock, Star, Users } from "lucide-react";
-import { useGetAllMissions, useGetUserParticipatedMissions } from "@/features";
+import {
+  useGetAllMissions,
+  useGetUserParticipatedMissions,
+  useStartMission,
+} from "@/features";
 import { useMemo } from "react";
 import { AllMissions } from "@/services/api";
 import { useCallback } from "react";
@@ -203,11 +207,26 @@ function MissionCard({
   mission: AllMissions;
   index: number;
 }) {
+  const startMission = useStartMission();
+  const navigate = useNavigate();
+
   const { data: participatedMissions } = useGetUserParticipatedMissions();
 
   const participatedMission = participatedMissions?.find(
     (p) => p.mission_id === mission.id
   );
+
+  function handleStartMission() {
+    if (!participatedMission) {
+      startMission.mutate(mission.id, {
+        onSuccess: () => {
+          navigate(`/missions/${mission.id}`);
+        },
+      });
+    } else {
+      navigate(`/missions/${mission.id}`);
+    }
+  }
 
   const completionPercentage = useMemo(() => {
     if (!participatedMission) return 0;
@@ -230,7 +249,7 @@ function MissionCard({
       };
     }
 
-    if (participatedMission.status === "STARTED") {
+    if (participatedMission.status === "IN_PROGRESS") {
       return {
         text: "Continue Mission",
         variant: "primary" as const,
@@ -264,89 +283,92 @@ function MissionCard({
       transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
       whileHover={{ scale: 1.02 }}
       className="group"
+      onClick={handleStartMission}
+      role="button"
+      tabIndex={0}
     >
-      <Link to={`/missions/${mission.id}`}>
-        <Card className="relative overflow-hidden border-2 border-transparent group-hover:border-primary-500 transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+      <Card className="relative overflow-hidden border-2 border-transparent group-hover:border-primary-500 transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
 
-          <CardContent className="pt-6">
-            {/* Mission Title & Clan */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                  {mission.title}
-                </h3>
-                <div className="flex items-center mt-2">
-                  <Badge
-                    variant="secondary"
-                    size="sm"
-                    className="flex items-center"
-                  >
-                    <Users className="w-3 h-3 mr-1" />
-                    {mission.clan?.name || "Unknown Clan"}
-                  </Badge>
-                </div>
+        <CardContent className="pt-6">
+          {/* Mission Title & Clan */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                {mission.title}
+              </h3>
+              <div className="flex items-center mt-2">
+                <Badge
+                  variant="secondary"
+                  size="sm"
+                  className="flex items-center"
+                >
+                  <Users className="w-3 h-3 mr-1" />
+                  {mission.clan?.name || "Unknown Clan"}
+                </Badge>
               </div>
-              {completionPercentage === 100 && (
-                <div className="flex items-center justify-center w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full">
-                  <Trophy className="w-4 h-4 text-green-600 dark:text-green-400" />
-                </div>
-              )}
             </div>
+            {completionPercentage === 100 && (
+              <div className="flex items-center justify-center w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full">
+                <Trophy className="w-4 h-4 text-green-600 dark:text-green-400" />
+              </div>
+            )}
+          </div>
 
-            {/* Mission Brief */}
-            <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-2">
-              {mission.brief}
-            </p>
+          {/* Mission Brief */}
+          <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-2">
+            {mission.brief}
+          </p>
 
-            {/* Progress & Rewards Section */}
-            <div className="space-y-4">
-              {/* Progress Bar - Show only if mission is started */}
-              {completionPercentage > 0 && (
-                <div>
-                  <div className="flex items-center justify-between mb-2 text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Progress
-                    </span>
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {completionPercentage}%
-                    </span>
-                  </div>
-                  <Progress
-                    value={completionPercentage}
-                    variant="primary"
-                    className="h-2 group-hover:h-3 transition-all duration-300"
-                  />
-                </div>
-              )}
+          {/* Progress & Rewards Section */}
+          <div className="space-y-4">
+            {/* Progress Bar - Show only if mission is started */}
 
-              {/* Mission Stats */}
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center text-gray-600 dark:text-gray-400">
-                  <Trophy className="w-4 h-4 mr-1" />
-                  <span>
-                    {reward.amount} {reward.token}
+            {participatedMission?.status === "IN_PROGRESS" && (
+              <div>
+                <div className="flex items-center justify-between mb-2 text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Progress
+                  </span>
+                  <span className="font-medium text-gray-900 dark:text-white">
+                    {completionPercentage}%
                   </span>
                 </div>
-                <div className="flex items-center text-gray-600 dark:text-gray-400">
-                  <Clock className="w-4 h-4 mr-1" />
-                  <span>{missionDuration}</span>
-                </div>
+                <Progress
+                  value={completionPercentage}
+                  variant="primary"
+                  className="h-2 group-hover:h-3 transition-all duration-300"
+                />
               </div>
+            )}
 
-              {/* Action Button */}
-              <Button
-                fullWidth
-                variant={buttonProps?.variant}
-                className="mt-4 group-hover:shadow-lg transition-shadow duration-300"
-                disabled={completionPercentage === 100}
-              >
-                {buttonProps?.text}
-              </Button>
+            {/* Mission Stats */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center text-gray-600 dark:text-gray-400">
+                <Trophy className="w-4 h-4 mr-1" />
+                <span>
+                  {reward.amount} {reward.token}
+                </span>
+              </div>
+              <div className="flex items-center text-gray-600 dark:text-gray-400">
+                <Clock className="w-4 h-4 mr-1" />
+                <span>{missionDuration}</span>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      </Link>
+
+            {/* Action Button */}
+            <Button
+              isLoading={startMission.isPending}
+              fullWidth
+              variant={buttonProps?.variant}
+              className="cursor-pointer mt-4 group-hover:shadow-lg transition-shadow duration-300"
+              disabled={completionPercentage === 100 || startMission.isPending}
+            >
+              {startMission.isPending ? "" : buttonProps?.text}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }

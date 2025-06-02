@@ -1,47 +1,48 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useToast } from "../context/ToastContext";
-import { Card, CardHeader, CardContent } from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import Avatar from "../components/ui/Avatar";
+import { useToast } from "@/context/ToastContext";
+import { Card, CardHeader, CardContent } from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Avatar from "@/components/ui/Avatar";
 import {
   Globe,
   ExternalLink,
   Trophy,
   Users,
-  Heart,
   Sparkles,
   Rocket,
 } from "lucide-react";
-import Badge from "../components/ui/Badge";
-import { formatNumber, cn } from "../lib/utils";
+import Badge from "@/components/ui/Badge";
+import { formatNumber, cn } from "@/lib/utils";
 import * as Tabs from "@radix-ui/react-tabs";
-import { useGetClanById } from "@/features";
+import {
+  useFollowClan,
+  useGetClanById,
+  useProfile,
+  useUnfollowClan,
+} from "@/features";
 
 export default function ClanPage() {
   const { clanId } = useParams<{ clanId: string }>();
   const { data: clan } = useGetClanById(clanId);
+  const { data: profile } = useProfile();
+  const followClan = useFollowClan();
+  const unFollowClan = useUnfollowClan();
 
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [isJoining, setIsJoining] = useState(false);
-  const { showToast } = useToast();
+  const isFollowingClan = profile?.joined_clans?.some(
+    (followedClan) => followedClan.clan_id === clanId
+  );
 
-  const handleFollow = () => {
-    setIsFollowing(!isFollowing);
-    showToast(
-      isFollowing ? "✌️ Unfollowed clan" : "🎉 Now following clan!",
-      "success"
-    );
-  };
+  function handleFollow() {
+    if (!clanId) return;
 
-  const handleJoinClan = () => {
-    setIsJoining(true);
-    setTimeout(() => {
-      setIsJoining(false);
-      showToast("🚀 Welcome to the clan!", "success");
-    }, 1500);
-  };
+    if (isFollowingClan) {
+      unFollowClan.mutate(clanId);
+    } else {
+      followClan.mutate(clanId);
+    }
+  }
 
   if (!clan) {
     return (
@@ -117,28 +118,8 @@ export default function ClanPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button
-                    variant={isFollowing ? "secondary" : "outline"}
-                    onClick={handleFollow}
-                    icon={
-                      isFollowing ? (
-                        <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                      ) : (
-                        <Heart className="w-4 h-4" />
-                      )
-                    }
-                    className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20"
-                  >
-                    {isFollowing ? "Following" : "Follow"}
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={handleJoinClan}
-                    isLoading={isJoining}
-                    icon={<Sparkles className="w-4 h-4" />}
-                    className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20"
-                  >
-                    Join Clan
+                  <Button variant="primary" onClick={handleFollow}>
+                    {isFollowingClan ? "Unfollow Clan" : "Follow Clan"}
                   </Button>
                 </div>
               </div>
