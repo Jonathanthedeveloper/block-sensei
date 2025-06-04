@@ -199,7 +199,7 @@ export interface ICreateMissionWithRounds {
 export interface ICreateMissionRound {
   title: string;
   welcome_message?: string;
-  introduction: number;
+  introduction: string;
   content?: string;
   quest: ICreateQuest;
 }
@@ -218,11 +218,8 @@ export interface ICreateQuiz {
 }
 
 export interface ICreateReward {
-  name: string;
-  description?: string;
-  reward_type: string;
-  reward_value: number;
-  max_winners?: number;
+  token: string;
+  amount: number;
 }
 
 export interface IUpdateMission {

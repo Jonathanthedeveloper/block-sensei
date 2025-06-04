@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import SuiWalletProvider from "./providers/SuiWalletProvider.tsx";
 import "@mysten/dapp-kit/dist/index.css";
+import "@mdxeditor/editor/style.css";
 
 const queryClient = new QueryClient();
 

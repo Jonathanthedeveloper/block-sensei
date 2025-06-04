@@ -6,9 +6,10 @@ export const useUpdateClan = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["updateClan"],
     mutationFn: ({ id, data }: { id: string; data: IUpdateClan }) =>
       updateClan(id, data),
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate and refetch clan queries
       queryClient.invalidateQueries({ queryKey: ["clans"] });
       queryClient.invalidateQueries({ queryKey: ["clan", variables.id] });

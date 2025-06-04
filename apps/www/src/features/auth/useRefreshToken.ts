@@ -4,6 +4,7 @@ import type { IRefreshToken } from "@/types";
 
 export const useRefreshToken = () => {
   return useMutation({
+    mutationKey: ["refreshAccessToken"],
     mutationFn: (data: IRefreshToken) => refreshAccessToken(data),
     onSuccess: (data) => {
       if (data.access_token) {

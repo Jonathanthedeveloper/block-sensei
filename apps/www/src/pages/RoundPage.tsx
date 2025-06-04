@@ -14,6 +14,9 @@ import { ArrowLeft, Gift, CheckCircle, HelpCircle, Trophy } from "lucide-react";
 import { QuestType } from "../types";
 import { cn } from "../lib/utils";
 import { useGetMissionById } from "@/features";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export default function RoundPage() {
   const { missionId, roundId } = useParams<{
@@ -124,7 +127,12 @@ export default function RoundPage() {
           <Card>
             <CardContent className="p-6">
               <div className="prose dark:prose-invert max-w-none">
-                {round.content}
+                <ReactMarkdown
+                  rehypePlugins={[rehypeRaw]}
+                  remarkPlugins={[remarkGfm]}
+                >
+                  {round.content}
+                </ReactMarkdown>
               </div>
             </CardContent>
           </Card>

@@ -6,6 +6,7 @@ export const useCompleteRound = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["completeRound"],
     mutationFn: ({
       roundId,
       data,

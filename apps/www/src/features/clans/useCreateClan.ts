@@ -6,6 +6,7 @@ export const useCreateClan = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["createClan"],
     mutationFn: (data: ICreateClan) => createClan(data),
     onSuccess: () => {
       // Invalidate and refetch clan queries

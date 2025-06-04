@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@mdxeditor/editor": "^3.35.0",
     "@mysten/dapp-kit": "^0.16.6",
     "@mysten/enoki": "^0.6.14",
     "@mysten/sui": "^1.30.2",
@@ -26,14 +28,21 @@
     "axios": "^1.8.4",
     "clsx": "^2.1.0",
     "framer-motion": "^12.15.0",
+    "gradient-from-image": "^0.0.7",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.57.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.1",
-    "tailwind-merge": "^3.3.0"
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.25.49"
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.3.1",

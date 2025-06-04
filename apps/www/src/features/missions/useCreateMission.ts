@@ -6,6 +6,7 @@ export const useCreateMission = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["createMissionWithRounds"],
     mutationFn: (data: ICreateMissionWithRounds) =>
       createMissionWithRounds(data),
     onSuccess: () => {
