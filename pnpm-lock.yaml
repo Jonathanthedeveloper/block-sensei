@@ -55,6 +55,9 @@ importers:
       compression:
         specifier: ^1.8.0
         version: 1.8.0
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
       helmet:
         specifier: ^8.1.0
         version: 8.1.0
