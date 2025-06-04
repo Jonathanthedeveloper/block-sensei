@@ -29,19 +29,19 @@ export default function LandingPage() {
 
   const stats = [
     {
-      icon: <Trophy className="h-8 w-8 text-yellow-500" />,
+      icon: <Trophy className='w-8 h-8 text-yellow-500' />,
       value: "50K+",
       label: "Active Players",
       color: "from-yellow-500/20 to-orange-500/20",
     },
     {
-      icon: <Gift className="h-8 w-8 text-purple-500" />,
+      icon: <Gift className='w-8 h-8 text-purple-500' />,
       value: "1M+",
       label: "BLOCK Earned",
       color: "from-purple-500/20 to-pink-500/20",
     },
     {
-      icon: <Star className="h-8 w-8 text-blue-500" />,
+      icon: <Star className='w-8 h-8 text-blue-500' />,
       value: "100K+",
       label: "Quests Completed",
       color: "from-blue-500/20 to-cyan-500/20",
@@ -50,28 +50,28 @@ export default function LandingPage() {
 
   const features = [
     {
-      icon: <Users className="h-12 w-12" />,
+      icon: <Users className='w-12 h-12' />,
       title: "Join Web3 Clans",
       description: "Team up with fellow adventurers in specialized Web3 clans",
       color: "from-blue-600 to-indigo-600",
       delay: 0.2,
     },
     {
-      icon: <Trophy className="h-12 w-12" />,
+      icon: <Trophy className='w-12 h-12' />,
       title: "Complete Missions",
       description: "Embark on exciting missions to earn rewards and level up",
       color: "from-purple-600 to-pink-600",
       delay: 0.3,
     },
     {
-      icon: <Sword className="h-12 w-12" />,
+      icon: <Sword className='w-12 h-12' />,
       title: "Battle Challenges",
       description: "Test your skills in daily challenges and competitions",
       color: "from-orange-600 to-red-600",
       delay: 0.4,
     },
     {
-      icon: <Award className="h-12 w-12" />,
+      icon: <Award className='w-12 h-12' />,
       title: "Earn NFT Rewards",
       description:
         "Collect unique badges and certificates on the Sui blockchain",
@@ -81,23 +81,23 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-primary-900 to-gray-900">
+    <div className='bg-gradient-to-b from-gray-900 via-primary-900 to-gray-900 min-h-screen'>
       {/* Hero Section */}
-      <div className="relative">
+      <div className='relative'>
         {/* Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-          <nav className="relative flex items-center justify-between sm:h-10 mb-16">
-            <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-              <div className="flex items-center justify-between w-full md:w-auto">
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 max-w-7xl'>
+          <nav className='relative flex justify-between items-center mb-16 sm:h-10'>
+            <div className='flex flex-grow lg:flex-grow-0 flex-shrink-0 items-center'>
+              <div className='flex justify-between items-center w-full md:w-auto'>
                 <motion.a
-                  href="#"
-                  className="flex items-center space-x-3"
+                  href='#'
+                  className='flex items-center space-x-3'
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Crown className="h-12 w-12 text-primary-400" />
-                  <span className="text-3xl font-bold text-white font-display">
+                  <Crown className='w-12 h-12 text-primary-400' />
+                  <span className='font-display font-bold text-white text-3xl'>
                     Block Sensei
                   </span>
                 </motion.a>
@@ -105,27 +105,27 @@ export default function LandingPage() {
             </div>
           </nav>
 
-          <div className="relative z-10">
+          <div className='z-10 relative'>
             <motion.div
-              className="text-center"
+              className='text-center'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
               <motion.h1
-                className="text-5xl sm:text-7xl font-bold tracking-tight text-white mb-6 font-display"
+                className='mb-6 font-display font-bold text-white text-5xl sm:text-7xl tracking-tight'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 Master Web3 Skills
-                <span className="block text-gradient bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400">
+                <span className='block bg-gradient-to-r from-primary-400 via-secondary-400 text-gradient to-accent-400'>
                   The Fun Way
                 </span>
               </motion.h1>
 
               <motion.p
-                className="max-w-2xl mx-auto text-xl text-gray-300 mb-4"
+                className='mx-auto mb-4 max-w-2xl text-gray-300 text-xl'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
@@ -135,7 +135,7 @@ export default function LandingPage() {
               </motion.p>
 
               <motion.p
-                className="max-w-2xl mx-auto text-lg text-primary-400 mb-10"
+                className='mx-auto mb-10 max-w-2xl text-primary-400 text-lg'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
@@ -144,12 +144,12 @@ export default function LandingPage() {
               </motion.p>
 
               <motion.div
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                className='flex sm:flex-row flex-col justify-center items-center gap-4'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <ConnectButton className="min-w-[200px] bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:shadow-lg transition-all duration-300">
+                <ConnectButton className='bg-gradient-to-r from-primary-500 via-secondary-500 hover:shadow-lg min-w-[200px] transition-all duration-300 to-accent-500'>
                   Start Your Journey
                 </ConnectButton>
               </motion.div>
@@ -157,7 +157,7 @@ export default function LandingPage() {
 
             {/* Stats */}
             <motion.div
-              className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-3"
+              className='gap-8 grid grid-cols-1 sm:grid-cols-3 mt-20'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
@@ -165,24 +165,24 @@ export default function LandingPage() {
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  className="text-center"
+                  className='text-center'
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
                 >
-                  <div className="relative mx-auto w-16 h-16 mb-4">
-                    <div className="absolute inset-0 bg-white/10 rounded-lg rotate-6" />
-                    <div className="absolute inset-0 bg-white/20 rounded-lg -rotate-3" />
+                  <div className='relative mx-auto mb-4 w-16 h-16'>
+                    <div className='absolute inset-0 bg-white/10 rounded-lg rotate-6' />
+                    <div className='absolute inset-0 bg-white/20 rounded-lg -rotate-3' />
                     <div
                       className={`relative bg-gradient-to-br ${stat.color} rounded-lg p-3`}
                     >
                       {stat.icon}
                     </div>
                   </div>
-                  <div className="text-4xl font-bold text-white mb-2">
+                  <div className='mb-2 font-bold text-white text-4xl'>
                     {stat.value}
                   </div>
-                  <div className="text-gray-400">{stat.label}</div>
+                  <div className='text-gray-400'>{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -191,11 +191,11 @@ export default function LandingPage() {
       </div>
 
       {/* Features */}
-      <div className="relative bg-gray-900 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      <div className='relative bg-gray-900 py-20'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
+          <div className='mb-16 text-center'>
             <motion.h2
-              className="text-3xl font-bold text-white mb-4 font-display"
+              className='mb-4 font-display font-bold text-white text-3xl'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -203,7 +203,7 @@ export default function LandingPage() {
               Your Adventure Awaits
             </motion.h2>
             <motion.p
-              className="text-xl text-gray-400"
+              className='text-gray-400 text-xl'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -212,30 +212,30 @@ export default function LandingPage() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className='gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
             {features.map((feature) => (
               <motion.div
                 key={feature.title}
-                className="relative group"
+                className='group relative'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: feature.delay }}
               >
-                <div className="relative p-6 bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-600/20 to-secondary-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className='relative bg-white/5 backdrop-blur-sm p-6 rounded-xl overflow-hidden'>
+                  <div className='absolute inset-0 bg-gradient-to-br from-primary-600/20 to-secondary-600/20 opacity-0 group-hover:opacity-100 transition-opacity' />
 
-                  <div className="relative">
-                    <div className="mb-4 inline-block">
+                  <div className='relative'>
+                    <div className='inline-block mb-4'>
                       <div
                         className={`relative p-3 rounded-lg bg-gradient-to-br ${feature.color}`}
                       >
                         {feature.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">
+                    <h3 className='mb-2 font-bold text-white text-xl'>
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400">{feature.description}</p>
+                    <p className='text-gray-400'>{feature.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -245,21 +245,21 @@ export default function LandingPage() {
       </div>
 
       {/* CTA */}
-      <div className="relative bg-gradient-to-b from-gray-900 to-primary-900">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+      <div className='relative bg-gradient-to-b from-gray-900 to-primary-900'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 max-w-7xl'>
           <motion.div
-            className="text-center"
+            className='text-center'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4 font-display">
+            <h2 className='mb-4 font-display font-bold text-white text-3xl sm:text-4xl tracking-tight'>
               Ready to Begin Your Adventure?
             </h2>
-            <p className="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
+            <p className='mx-auto mb-8 max-w-2xl text-gray-400 text-lg'>
               Connect your Sui wallet and start earning rewards today!
             </p>
-            <ConnectButton className="bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:shadow-lg transition-all duration-300">
+            <ConnectButton className='bg-gradient-to-r from-primary-500 via-secondary-500 hover:shadow-lg transition-all duration-300 to-accent-500'>
               Start Now
             </ConnectButton>
           </motion.div>
