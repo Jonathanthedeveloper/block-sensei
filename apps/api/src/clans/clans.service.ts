@@ -285,6 +285,7 @@ export class ClansService {
           _count: {
             select: {
               followers: true,
+              missions: true,
             },
           },
         },

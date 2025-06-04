@@ -5,6 +5,7 @@ export const useDeleteClan = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["deleteClan"],
     mutationFn: (id: string) => deleteClan(id),
     onSuccess: () => {
       // Invalidate and refetch clan queries

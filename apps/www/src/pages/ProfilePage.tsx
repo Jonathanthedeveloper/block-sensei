@@ -82,8 +82,12 @@ export default function ProfilePage() {
                   className="border-4 border-white/10"
                 />
                 <div>
+                  <h2 className="text-xl font-bold">Wallet Address</h2>
                   <div className="flex items-center gap-2 mb-2">
-                    <h2 className="text-xl font-bold">Wallet Address</h2>
+                    {" "}
+                    <p className="text-gray-500 dark:text-gray-300 font-mono">
+                      {formatAddress(profile.wallet_address)}
+                    </p>
                     <button
                       onClick={copyAddress}
                       className="p-1 hover:bg-white/10 rounded-md transition-colors"
@@ -92,15 +96,12 @@ export default function ProfilePage() {
                       <Copy size={16} />
                     </button>
                   </div>
-                  <p className="text-gray-500 dark:text-gray-300 font-mono">
-                    {profile.wallet_address}
-                  </p>
                 </div>
               </div>
 
               <div className="md:ml-auto flex gap-3">
                 <Button
-                  className="cursor-pointer"
+                  className="cursor-pointer text-sm sm:text-base"
                   variant="primary"
                   size="lg"
                   onClick={() => setIsWithdrawModalOpen(true)}
@@ -113,7 +114,7 @@ export default function ProfilePage() {
                   size="lg"
                   onClick={handleLogout}
                   icon={<LogOut className="w-5 h-5" />}
-                  className="dark:border-white/20 dark:text-white dark:hover:bg-white/10 cursor-pointer"
+                  className="dark:border-white/20 dark:text-white dark:hover:bg-white/10 cursor-pointer text-sm sm:text-base"
                 >
                   Logout
                 </Button>
@@ -175,7 +176,7 @@ export default function ProfilePage() {
                   <Tabs.Trigger
                     value="badges"
                     className={cn(
-                      "px-6 py-3 text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer",
+                      "px-6 py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer",
                       "text-gray-400 hover:text-gray-500 hover:bg-primary-400 dark:hover:text-white dark:hover:bg-white/5",
                       "data-[state=active]:bg-primary-500 data-[state=active]:text-white"
                     )}

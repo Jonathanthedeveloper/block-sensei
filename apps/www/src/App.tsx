@@ -36,7 +36,10 @@ function App() {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="studio" element={<StudioPage />} />
         <Route path="studio/create-clan" element={<CreateClanPage />} />
-        <Route path="studio/create-mission" element={<CreateMissionPage />} />
+        <Route
+          path="studio/mission/:clanId/:missionId?"
+          element={<CreateMissionPage />}
+        />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

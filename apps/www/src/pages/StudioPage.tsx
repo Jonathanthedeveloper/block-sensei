@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Avatar from "@/components/ui/Avatar";
-import { useToast } from "../context/ToastContext";
 import {
   Plus,
   Edit3,
@@ -17,20 +16,17 @@ import {
   Scroll,
   ArrowRight,
 } from "lucide-react";
-import { mockClans, mockMissions } from "../data/mockData";
+import { mockMissions } from "../data/mockData";
 import { formatNumber } from "../lib/utils";
+import { useGetUserCreatedClans } from "@/features";
 
 export default function StudioPage() {
   const navigate = useNavigate();
-  const { showToast } = useToast();
   const [selectedClan, setSelectedClan] = useState<string | null>(null);
+  const { data: clans } = useGetUserCreatedClans();
 
   const handleClanSelect = (clanId: string) => {
     setSelectedClan(clanId);
-  };
-
-  const handleDeleteMission = (missionId: string) => {
-    showToast("Mission deleted successfully", "success");
   };
 
   return (
@@ -73,7 +69,7 @@ export default function StudioPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockClans.map((clan) => (
+            {clans?.clans?.map((clan) => (
               <motion.div
                 key={clan.id}
                 whileHover={{ scale: 1.02 }}
@@ -112,11 +108,11 @@ export default function StudioPage() {
                       <div className="flex items-center gap-4">
                         <Badge variant="secondary" size="sm">
                           <Users className="w-3 h-3 mr-1" />
-                          {formatNumber(clan.member_count)} Members
+                          {formatNumber(clan._count.followers)} Members
                         </Badge>
                         <Badge variant="accent" size="sm">
                           <Trophy className="w-3 h-3 mr-1" />
-                          {clan.missions_count} Missions
+                          {clan._count.missions} Missions
                         </Badge>
                       </div>
                     </CardContent>
@@ -139,9 +135,11 @@ export default function StudioPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <Avatar
-                    src={mockClans.find((c) => c.id === selectedClan)?.logo_url}
-                    alt={mockClans.find((c) => c.id === selectedClan)?.name}
-                    fallback={mockClans
+                    src={
+                      clans?.clans.find((c) => c.id === selectedClan)?.logo_url
+                    }
+                    alt={clans?.clans.find((c) => c.id === selectedClan)?.name}
+                    fallback={clans?.clans
                       .find((c) => c.id === selectedClan)
                       ?.name.substring(0, 2)}
                     size="lg"
@@ -149,7 +147,7 @@ export default function StudioPage() {
                   />
                   <div>
                     <h2 className="text-2xl font-bold">
-                      {mockClans.find((c) => c.id === selectedClan)?.name}
+                      {clans?.clans.find((c) => c.id === selectedClan)?.name}
                     </h2>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge
@@ -159,8 +157,8 @@ export default function StudioPage() {
                       >
                         <Users className="w-3 h-3 mr-1" />
                         {formatNumber(
-                          mockClans.find((c) => c.id === selectedClan)
-                            ?.member_count || 0
+                          clans?.clans.find((c) => c.id === selectedClan)
+                            ?._count.followers || 0
                         )}{" "}
                         Members
                       </Badge>
@@ -170,10 +168,8 @@ export default function StudioPage() {
                         className="bg-white/10 border-white/20"
                       >
                         <Trophy className="w-3 h-3 mr-1" />
-                        {
-                          mockClans.find((c) => c.id === selectedClan)
-                            ?.missions_count
-                        }{" "}
+                        {clans?.clans.find((c) => c.id === selectedClan)?._count
+                          .missions || 0}{" "}
                         Missions
                       </Badge>
                     </div>
@@ -183,15 +179,13 @@ export default function StudioPage() {
                   <Button
                     variant="outline"
                     onClick={() => setSelectedClan(null)}
-                    className="border-white/20 text-white hover:bg-white/10"
                   >
                     Back to Clans
                   </Button>
                   <Button
                     variant="primary"
-                    onClick={() => navigate("/studio/create-mission")}
+                    onClick={() => navigate(`/studio/mission/${selectedClan}`)}
                     icon={<Plus className="w-4 h-4" />}
-                    className="bg-white/10 backdrop-blur-sm hover:bg-white/20"
                   >
                     Create Mission
                   </Button>
@@ -238,7 +232,7 @@ export default function StudioPage() {
                               variant="ghost"
                               size="sm"
                               icon={<Trash2 className="w-4 h-4" />}
-                              onClick={() => handleDeleteMission(mission.id)}
+                              onClick={() => {}}
                               className="hover:bg-error-50 dark:hover:bg-error-900/20 hover:text-error-600 dark:hover:text-error-400"
                             >
                               Delete
