@@ -17,6 +17,10 @@ import {
 } from "lucide-react";
 import { formatNumber, cn } from "../lib/utils";
 import { useGetUserParticipatedMissions, useProfile } from "@/features";
+import Quest from "../assets/quest.png";
+import Coin from "../assets/coin.png";
+import Mission from "../assets/mission.png";
+import Achievement from "../assets/achievement.png";
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
@@ -49,28 +53,28 @@ export default function Dashboard() {
       value: profile.mission_participations.filter(
         (participation) => participation.status === "COMPLETED"
       ).length,
-      icon: <Trophy className='w-6 h-6' />,
+      icon: <img src={Mission} alt='coin' className='w-5 h-5' />,
       color: "from-primary-500 to-secondary-500",
       change: "+2 this week",
     },
     {
       title: "Quests Completed",
       value: 2,
-      icon: <Target className='w-6 h-6' />,
+      icon: <img src={Quest} alt='coin' className='w-5 h-5' />,
       color: "from-secondary-500 to-accent-500",
       change: "+5 this week",
     },
     {
       title: "Achievements",
       value: 2,
-      icon: <Award className='w-6 h-6' />,
+      icon: <img src={Achievement} alt='coin' className='w-4 h-4' />,
       color: "from-accent-500 to-primary-500",
       change: "New badge unlocked!",
     },
     {
       title: "BLOCK Earned",
       value: 2,
-      icon: <Gift className='w-6 h-6' />,
+      icon: <img src={Coin} alt='coin' className='w-4 h-4' />,
       color: "from-success-500 to-primary-500",
       change: "+300 today",
     },

@@ -1,16 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "../../lib/utils";
-import {
-  LayoutDashboard,
-  Trophy,
-  Shapes,
-  Users,
-  Award,
-  ArrowRight,
-  Edit3,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import Logo from "../../assets/logo.png";
+import Quest from "../../assets/quest.png";
+import Logo from "../../assets/Logo.png";
+import Mission from "../../assets/mission.png";
+import Achievement from "../../assets/achievement.png";
+import Notification from "../../assets/notification.png";
+import Team from "../../assets/team.png";
+import Profile from "../../assets/profile.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -36,32 +34,32 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
     {
       name: "Dashboard",
       href: "/dashboard",
-      icon: LayoutDashboard,
+      icon: Mission,
     },
     {
       name: "Missions",
       href: "/missions",
-      icon: Trophy,
+      icon: Quest,
     },
     {
       name: "Clans",
       href: "/clans",
-      icon: Shapes,
+      icon: Team,
     },
     {
       name: "Leaderboard",
       href: "/leaderboard",
-      icon: Award,
+      icon: Achievement,
     },
     {
       name: "Studio",
       href: "/studio",
-      icon: Edit3,
+      icon: Notification,
     },
     {
       name: "Profile",
       href: "/profile",
-      icon: Users,
+      icon: Profile,
     },
   ];
 
@@ -111,7 +109,7 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
                 )}
                 onClick={closeSidebarIfMobile}
               >
-                <Icon size={20} />
+                <img src={Icon} alt='icon' className='mr-5 w-4 h-4' />
               </Link>
             );
           })}
@@ -166,7 +164,7 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
                   )}
                   onClick={closeSidebarIfMobile}
                 >
-                  <Icon size={20} className='flex-shrink-0 mr-3' />
+                  <img src={Icon} alt='icon' className='mr-5 w-4 h-4' />
                   <span>{item.name}</span>
                   {isActive && <ArrowRight className='ml-auto w-4 h-4' />}
                 </Link>
