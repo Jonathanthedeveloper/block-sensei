@@ -8,6 +8,7 @@ import React from "react";
 import { useSuiClientContext } from "@mysten/dapp-kit";
 import { isEnokiNetwork, registerEnokiWallets } from "@mysten/enoki";
 import { useEffect } from "react";
+import { lightTheme } from "./MyTheme";
 
 const { networkConfig } = createNetworkConfig({
   testnet: { url: getFullnodeUrl("testnet") },
@@ -22,7 +23,7 @@ export default function SuiWalletProvider({
 }) {
   return (
     <SuiClientProvider networks={networkConfig} defaultNetwork='testnet'>
-      <WalletProvider autoConnect>
+      <WalletProvider autoConnect theme={[{ variables: lightTheme }]}>
         <EnokiWalletProvider />
         {children}
       </WalletProvider>

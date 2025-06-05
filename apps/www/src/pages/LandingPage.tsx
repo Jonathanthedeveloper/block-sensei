@@ -103,15 +103,12 @@ export default function LandingPage() {
                   transition={{ duration: 0.5 }}
                 >
                   <img src={Logo} alt='logo' />
-                  {/* <Crown className='w-12 h-12 text-primary-400' />
-                  <span className='font-display font-bold text-white text-3xl'>
-                    Block Sensei
-                  </span> */}
                 </motion.a>
               </div>
-              <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'>
-                Start Now
-              </ConnectButton>
+              <ConnectButton
+                connectText='Start Now'
+                className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'
+              />
             </div>
           </nav>
 
