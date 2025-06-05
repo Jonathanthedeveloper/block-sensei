@@ -9,10 +9,15 @@ import { CreateMissionWithRoundsDto } from './dtos/create-mission-with-rounds.dt
 import { StartMissionDto } from './dtos/start-mission.dto';
 import { StartRoundDto } from './dtos/start-round.dto';
 import { CompleteRoundDto } from './dtos/complete-round.dto';
+import { Prisma } from '@prisma/client';
+import { SuiService } from 'src/sui/sui.service';
 
 @Injectable()
 export class MissionsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly suiService: SuiService,
+  ) {}
 
   // Create mission with rounds and nested quests/rewards
   async createMissionWithRounds(data: CreateMissionWithRoundsDto) {
@@ -681,7 +686,16 @@ export class MissionsService {
         },
       },
       include: {
-        participation: true,
+        participation: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                wallet_address: true,
+              },
+            },
+          },
+        },
         mission_round: {
           include: {
             quest: {
@@ -720,7 +734,7 @@ export class MissionsService {
           quest,
           data.quiz_answers || [],
         );
-        completionStatus = result.allCorrect ? 'COMPLETED' : 'FAILED';
+        completionStatus = 'COMPLETED';
         questAnswers = result.questAnswers;
       } else {
         // For non-quiz quests, completion is typically automatic or verified externally
@@ -756,6 +770,12 @@ export class MissionsService {
         },
       });
 
+      // Send rewards to wallet
+      await this.suiService.sendBlocks(
+        roundProgress.participation.user.wallet_address,
+        quest.reward.amount,
+      );
+
       // Check if all rounds in the mission are completed
       const allRoundsProgress = await prisma.roundProgress.findMany({
         where: {
@@ -776,6 +796,8 @@ export class MissionsService {
             completed_at: new Date(),
           },
         });
+
+        await this.suiService.mintCertificate();
       }
 
       return {
@@ -791,7 +813,12 @@ export class MissionsService {
   private async handleQuizCompletion(
     prisma: any,
     roundProgress: any,
-    quest: any,
+    quest: Prisma.QuestGetPayload<{
+      include: {
+        quiz: true;
+        reward: true;
+      };
+    }>,
     quizAnswers: { quest_quiz_id: string; user_answer: string }[],
   ) {
     let allCorrect = true;
@@ -980,7 +1007,7 @@ export class MissionsService {
         skip,
         take: limit,
         orderBy: {
-          completed_at: 'asc', // Earliest completion first (leaderboard)
+          completed_at: 'asc',
         },
         include: {
           user: {

@@ -1,37 +1,61 @@
 import { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useToast } from "../context/ToastContext";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import Badge from "../components/ui/Badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
 import { ArrowLeft, Gift, CheckCircle, HelpCircle, Trophy } from "lucide-react";
-import { QuestType } from "../types";
-import { cn } from "../lib/utils";
-import { useGetMissionById } from "@/features";
+import { ICompleteRound, QuestType } from "@/types";
+import { cn } from "@/lib/utils";
+import { useCompleteRound, useGetMissionById } from "@/features";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { QuestQuiz } from "types";
 
 export default function RoundPage() {
   const { missionId, roundId } = useParams<{
     missionId: string;
     roundId: string;
   }>();
-  const navigate = useNavigate();
-  const { showToast } = useToast();
   const { data: mission } = useGetMissionById(missionId);
+  const completeRound = useCompleteRound();
 
   const round = mission?.mission_rounds?.find((r) => r.id === roundId);
 
   const [showQuiz, setShowQuiz] = useState(false);
-  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Create dynamic Zod schema based on quiz questions
+  const createQuizSchema = (quiz: QuestQuiz[]) => {
+    const schemaFields: Record<string, z.ZodString> = {};
+
+    quiz?.forEach((question) => {
+      schemaFields[question.id] = z.string({
+        required_error: "Please select an answer for this question",
+      });
+    });
+
+    return z.object(schemaFields);
+  };
+
+  // Initialize form when quiz data is available
+  const quizSchema = round?.quest?.quiz
+    ? createQuizSchema(round.quest.quiz)
+    : z.object({});
+  type QuizFormValues = z.infer<typeof quizSchema>;
+
+  const {
+    handleSubmit,
+    register,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<QuizFormValues>({
+    resolver: zodResolver(quizSchema),
+    mode: "onChange",
+  });
 
   if (!mission || !round) {
     return (
@@ -54,23 +78,17 @@ export default function RoundPage() {
     setShowQuiz(true);
   };
 
-  const handleQuizAnswerChange = (questionId: string, value: string) => {
-    setQuizAnswers((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
-  };
-
-  const handleQuizSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      showToast("🎉 Quest completed successfully!", "success");
-      navigate(`/missions/${missionId}`);
-    }, 1500);
+  const handleQuizSubmit = (data: QuizFormValues) => {
+    completeRound.mutate({
+      roundId: round.id,
+      data: {
+        mission_round_id: round.id,
+        quiz_answers: round.quest?.quiz.map((question) => ({
+          quest_quiz_id: question.id,
+          user_answer: data[question.id as keyof typeof data],
+        })) as ICompleteRound["quiz_answers"],
+      },
+    });
   };
 
   return (
@@ -175,7 +193,10 @@ export default function RoundPage() {
             </CardHeader>
             <CardContent>
               {round.quest?.type === QuestType.QUIZ && round.quest.quiz && (
-                <form onSubmit={handleQuizSubmit} className="space-y-6">
+                <form
+                  onSubmit={handleSubmit(handleQuizSubmit)}
+                  className="space-y-6"
+                >
                   {round.quest.quiz.map((question, qIndex) => {
                     const options = JSON.parse(question.options);
                     return (
@@ -192,24 +213,15 @@ export default function RoundPage() {
                               key={oIndex}
                               className={cn(
                                 "flex items-center p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer",
-                                quizAnswers[question.id] === oIndex.toString()
+                                watch(question.id) === oIndex.toString()
                                   ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
                                   : "border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-800"
                               )}
                             >
                               <input
                                 type="radio"
-                                name={`question-${question.id}`}
-                                value={oIndex.toString()}
-                                checked={
-                                  quizAnswers[question.id] === oIndex.toString()
-                                }
-                                onChange={() =>
-                                  handleQuizAnswerChange(
-                                    question.id,
-                                    oIndex.toString()
-                                  )
-                                }
+                                value={option}
+                                {...register(question.id)}
                                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600"
                               />
                               <span className="ml-3 text-gray-700 dark:text-gray-300">
@@ -218,6 +230,14 @@ export default function RoundPage() {
                             </label>
                           ))}
                         </div>
+                        {errors[question.id as keyof typeof errors] && (
+                          <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                            {
+                              errors[question.id as keyof typeof errors]
+                                ?.message
+                            }
+                          </p>
+                        )}
                       </div>
                     );
                   })}
@@ -232,11 +252,9 @@ export default function RoundPage() {
                     </Button>
                     <Button
                       type="submit"
-                      isLoading={isSubmitting}
-                      disabled={
-                        Object.keys(quizAnswers).length !==
-                        round.quest.quiz?.length
-                      }
+                      isLoading={completeRound.isPending}
+                      disabled={!isValid || completeRound.isPending}
+                      variant="primary"
                       icon={<CheckCircle size={20} />}
                     >
                       Submit Answers

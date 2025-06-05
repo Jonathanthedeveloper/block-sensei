@@ -12,7 +12,7 @@ export const useCompleteRound = () => {
       data,
     }: {
       roundId: string;
-      data: Omit<ICompleteRound, "mission_round_id">;
+      data: ICompleteRound;
     }) => completeRound(roundId, data),
     onSuccess: () => {
       // Invalidate mission progress and leaderboard
