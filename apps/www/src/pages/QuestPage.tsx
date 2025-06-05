@@ -61,11 +61,25 @@ export default function QuestPage() {
     };
   }, [mission]);
 
-  const currentRoundIndex =
-    missionProgress?.round_progress.findIndex(
-      (round) =>
-        round.status === "IN_PROGRESS" || round.status === "NOT_STARTED"
-    ) || 0;
+  const completedRounds = useMemo(() => {
+    if (!mission || !mission.mission_rounds) return 0;
+    return mission.mission_rounds.filter((round) =>
+      missionProgress?.round_progress?.some(
+        (progress) =>
+          progress.mission_round_id === round.id &&
+          (progress.status === "COMPLETED" || progress.status === "FAILED")
+      )
+    ).length;
+  }, [mission, missionProgress]);
+
+  let currentRoundIndex = missionProgress?.round_progress.findIndex(
+    (round) => round.status === "IN_PROGRESS" || round.status === "NOT_STARTED"
+  );
+
+  // If all rounds are finished (completed or failed), set to total
+  if (currentRoundIndex === -1) {
+    currentRoundIndex = mission?.mission_rounds.length || 0;
+  }
 
   if (!mission && !isPending) {
     return (
@@ -176,14 +190,12 @@ export default function QuestPage() {
                     Mission Progress
                   </span>
                   <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
-                    {currentRoundIndex + 1} of {mission?.mission_rounds.length}{" "}
-                    Rounds
+                    {completedRounds} of {mission?.mission_rounds.length} Rounds
                   </span>
                 </div>
                 <Progress
                   value={
-                    (currentRoundIndex /
-                      (mission?.mission_rounds?.length || 1)) *
+                    (completedRounds / (mission?.mission_rounds?.length || 1)) *
                     100
                   }
                   variant="primary"
@@ -207,9 +219,9 @@ export default function QuestPage() {
           <RoundCard
             key={round.id}
             round={round}
-            isLocked={index > currentRoundIndex}
-            isCompleted={index < currentRoundIndex}
-            isCurrent={index === currentRoundIndex}
+            isLocked={index > (currentRoundIndex || 0)}
+            isCompleted={index < (currentRoundIndex || 0)}
+            isCurrent={index === (currentRoundIndex || 0)}
             index={index}
           />
         ))}

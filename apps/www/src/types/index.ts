@@ -239,8 +239,7 @@ export interface IStartRound {
 
 export interface ICompleteRound {
   mission_round_id: string;
-  answers?: any[]; // You might want to define a proper answer type
-  completion_data?: any;
+  quiz_answers?: string[];
 }
 
 // Common types for pagination

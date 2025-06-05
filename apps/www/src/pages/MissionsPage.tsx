@@ -5,8 +5,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Button from "@/components/ui/Button";
-import { mockClans } from "@/data/mockData";
-import { Search, ArrowUpDown, Trophy, Clock, Star, Users } from "lucide-react";
+import { Search, ArrowUpDown, Trophy, Clock, Users } from "lucide-react";
 import {
   useGetAllMissions,
   useGetUserParticipatedMissions,
@@ -14,28 +13,15 @@ import {
 } from "@/features";
 import { useMemo } from "react";
 import { AllMissions } from "@/services/api";
-import { useCallback } from "react";
 
 export default function MissionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [clanFilter, setClanFilter] = useState<string>("all");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const { data: allMissions } = useGetAllMissions();
   const { data: participatedMissions } = useGetUserParticipatedMissions();
 
-  const getMissionParticipationStatus = useCallback(
-    (missionId: string) => {
-      if (!participatedMissions) return null;
-
-      const participation = participatedMissions.find(
-        (p) => p.mission_id === missionId
-      );
-      return participation || null;
-    },
-    [participatedMissions]
-  );
+  console.log(participatedMissions);
 
   // Consolidated filtering and sorting in useMemo
   const filteredMissions = useMemo(() => {
@@ -52,28 +38,6 @@ export default function MissionsPage() {
       );
     }
 
-    // Apply status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((mission) => {
-        const participation = getMissionParticipationStatus(mission.id);
-        if (statusFilter === "started") {
-          return participation && participation.status === "STARTED";
-        }
-        if (statusFilter === "completed") {
-          return participation && participation.status === "COMPLETED";
-        }
-        if (statusFilter === "not_started") {
-          return !participation;
-        }
-        return true;
-      });
-    }
-
-    // Apply clan filter
-    if (clanFilter !== "all") {
-      filtered = filtered.filter((mission) => mission.clan_id === clanFilter);
-    }
-
     // Apply sorting
     filtered.sort((a, b) => {
       const dateA = new Date(a.created_at).getTime();
@@ -82,14 +46,7 @@ export default function MissionsPage() {
     });
 
     return filtered;
-  }, [
-    allMissions?.missions,
-    searchTerm,
-    statusFilter,
-    clanFilter,
-    sortOrder,
-    getMissionParticipationStatus,
-  ]);
+  }, [allMissions?.missions, searchTerm, sortOrder]);
 
   return (
     <div className="space-y-6">
@@ -125,40 +82,6 @@ export default function MissionsPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
-
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Star className="h-5 w-5 text-gray-400" />
-          </div>
-          <select
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="all">All Status</option>
-            <option value="not_started">Not Started</option>
-            <option value="started">In Progress</option>
-            <option value="completed">Completed</option>
-          </select>
-        </div>
-
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Users className="h-5 w-5 text-gray-400" />
-          </div>
-          <select
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none"
-            value={clanFilter}
-            onChange={(e) => setClanFilter(e.target.value)}
-          >
-            <option value="all">All Clans</option>
-            {mockClans.map((clan) => (
-              <option key={clan.id} value={clan.id}>
-                {clan.name}
-              </option>
-            ))}
-          </select>
         </div>
 
         <button
@@ -255,6 +178,19 @@ function MissionCard({
         variant: "primary" as const,
       };
     }
+
+    if (participatedMission.status === "COMPLETED") {
+      return {
+        text: "Review Mission",
+        variant: "secondary" as const,
+      };
+    }
+
+    // Default fallback
+    return {
+      text: "View Mission",
+      variant: "outline" as const,
+    };
   }, [participatedMission]);
 
   // Calculate mission duration based on number of rounds
@@ -362,7 +298,7 @@ function MissionCard({
               fullWidth
               variant={buttonProps?.variant}
               className="cursor-pointer mt-4 group-hover:shadow-lg transition-shadow duration-300"
-              disabled={completionPercentage === 100 || startMission.isPending}
+              disabled={startMission.isPending}
             >
               {startMission.isPending ? "" : buttonProps?.text}
             </Button>

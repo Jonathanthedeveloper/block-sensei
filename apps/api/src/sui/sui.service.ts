@@ -50,4 +50,10 @@ export class SuiService implements OnModuleInit {
       throw new Error(`Failed to get all token balances: ${message}`);
     }
   }
+
+  async mintCertificate() {}
+
+  async mintBadge() {}
+
+  async sendBlocks(walletAddress: string, amount: number) {}
 }
