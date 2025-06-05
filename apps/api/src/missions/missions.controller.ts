@@ -24,7 +24,6 @@ import { Public } from '../auth/auth.decorator';
 export class MissionsController {
   constructor(private readonly missionsService: MissionsService) {}
 
-  // Mission CRUD endpoints
   @Post()
   createMission(
     @Body() createMissionWithRoundsDto: CreateMissionWithRoundsDto,
@@ -71,7 +70,7 @@ export class MissionsController {
   deleteMission(@Param('id') id: string) {
     return this.missionsService.deleteMission(id);
   }
-  // Progress tracking endpoints
+
   @Post(':id/start')
   startMission(@Param('id') id: string, @Req() request: any) {
     const data: StartMissionDto = { mission_id: id };
@@ -87,12 +86,11 @@ export class MissionsController {
   @Post('rounds/:id/complete')
   completeRound(
     @Param('id') roundId: string,
-    @Body() completeRoundDto: CompleteRoundDto,
+    @Body() body: CompleteRoundDto,
     @Req() request: any,
   ) {
-    // Override the mission_round_id from the URL parameter to ensure consistency
-    const dto = { ...completeRoundDto, mission_round_id: roundId };
-    return this.missionsService.completeRound(request.user.id, dto);
+    const data = { ...body, mission_round_id: roundId };
+    return this.missionsService.completeRound(request.user.id, data);
   }
 
   @Get(':id/progress')

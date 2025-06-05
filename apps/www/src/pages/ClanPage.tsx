@@ -1,18 +1,9 @@
-import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useToast } from "@/context/ToastContext";
 import { Card, CardHeader, CardContent } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Avatar from "@/components/ui/Avatar";
-import {
-  Globe,
-  ExternalLink,
-  Trophy,
-  Users,
-  Sparkles,
-  Rocket,
-} from "lucide-react";
+import { Globe, ExternalLink, Trophy, Users, Rocket } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import { formatNumber, cn } from "@/lib/utils";
 import * as Tabs from "@radix-ui/react-tabs";
