@@ -151,10 +151,27 @@ export async function getUserFollowedClans(params?: IPaginationParams) {
 
 export async function getUserCreatedClans(params?: IPaginationParams) {
   const response = await api.get<{
-    data: Clan[];
-    total: number;
-    page: number;
-    limit: number;
+    clans: Prisma.ClanGetPayload<{
+      include: {
+        creator: {
+          select: {
+            id: true;
+            wallet_address: true;
+          };
+        };
+        _count: {
+          select: {
+            followers: true;
+            missions: true;
+          };
+        };
+      };
+    }>[];
+    pagination: {
+      total: number;
+      page: number;
+      limit: number;
+    };
   }>("clans/user/created", { params });
   return response.data;
 }
@@ -403,4 +420,19 @@ export async function getUserParticipatedMissions() {
     }>[]
   >("missions/users/participated");
   return response.data;
+}
+
+/******************
+ * UPLOADS
+ */
+
+export async function uploadImage(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await api.post<{ url: string }>("uploads", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data.url;
 }
