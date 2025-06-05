@@ -8,6 +8,12 @@ const axiosInstance = axios.create({
   },
 });
 
+console.log(
+  `EnokiWalletProvider: ${import.meta.env.VITE_ENOKI_API_KEY} - ${
+    import.meta.env.VITE_GOOGLE_CLIENT_ID
+  } - ${import.meta.env.VITE_BASE_API_URL}`
+);
+
 // Request interceptor to add auth token
 axiosInstance.interceptors.request.use(
   (config) => {

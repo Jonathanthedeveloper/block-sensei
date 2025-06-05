@@ -21,7 +21,7 @@ export default function SuiWalletProvider({
   children: React.ReactNode;
 }) {
   return (
-    <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+    <SuiClientProvider networks={networkConfig} defaultNetwork='testnet'>
       <WalletProvider autoConnect>
         <EnokiWalletProvider />
         {children}
