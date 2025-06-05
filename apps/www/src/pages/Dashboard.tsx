@@ -41,7 +41,7 @@ export default function Dashboard() {
         )
       : 0;
 
-  if (profile) return null;
+  if (!profile) return null;
 
   const stats = [
     {
@@ -82,14 +82,10 @@ export default function Dashboard() {
       <div className='relative'>
         <motion.div className='absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 opacity-10 rounded-lg to-accent-500' />
         <div className='relative p-6 rounded-lg'>
-          <div className='flex justify-between items-center mb-4'>
-      <div className="relative">
-        <motion.div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 opacity-10 rounded-lg to-accent-500" />
-        <div className="relative p-6 rounded-lg">
-          <div className="flex justify-between items-start mb-4">
+          <div className='flex justify-between items-start mb-4'>
             <div>
               <motion.h1
-                className="flex items-start gap-2 font-bold text-gray-900 text-md dark:text-white sm:text-2xl"
+                className='flex items-start gap-2 font-bold text-gray-900 text-md dark:text-white sm:text-2xl'
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -103,9 +99,9 @@ export default function Dashboard() {
                 Your Sui adventure continues...
               </p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Star className="size-4 sm:size-5 text-yellow-500" />
-              <span className="font-bold text-gray-900 dark:text-white text-xs sm:text-lg shrink-0">
+            <div className='flex items-center gap-2 shrink-0'>
+              <Star className='size-4 sm:size-5 text-yellow-500' />
+              <span className='font-bold text-gray-900 dark:text-white text-xs sm:text-lg shrink-0'>
                 {formatNumber(profile.block_balance)} XP
               </span>
             </div>
@@ -188,47 +184,47 @@ export default function Dashboard() {
 
 function QuickActions() {
   return (
-    <div className="">
-      <h2 className="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-white text-xl">
-        <Target className="w-5 h-5 text-primary-500" />
+    <div className=''>
+      <h2 className='flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-white text-xl'>
+        <Target className='w-5 h-5 text-primary-500' />
         Quick Actions
       </h2>
       <motion.div
-        className="gap-4 grid grid-cols-1 md:grid-cols-3"
+        className='gap-4 grid grid-cols-1 md:grid-cols-3'
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
       >
-        <Link to="/missions">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-4 text-center">
-              <Trophy className="mx-auto mb-2 w-8 h-8 text-primary-500" />
-              <h3 className="font-semibold">Start Mission</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <Link to='/missions'>
+          <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+            <CardContent className='p-4 text-center'>
+              <Trophy className='mx-auto mb-2 w-8 h-8 text-primary-500' />
+              <h3 className='font-semibold'>Start Mission</h3>
+              <p className='text-gray-600 dark:text-gray-400 text-sm'>
                 Begin new adventure
               </p>
             </CardContent>
           </Card>
         </Link>
 
-        <Link to="/clans">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-4 text-center">
-              <Users className="mx-auto mb-2 w-8 h-8 text-secondary-500" />
-              <h3 className="font-semibold">Join Clan</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <Link to='/clans'>
+          <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+            <CardContent className='p-4 text-center'>
+              <Users className='mx-auto mb-2 w-8 h-8 text-secondary-500' />
+              <h3 className='font-semibold'>Join Clan</h3>
+              <p className='text-gray-600 dark:text-gray-400 text-sm'>
                 Connect with others
               </p>
             </CardContent>
           </Card>
         </Link>
 
-        <Link to="/leaderboard">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-4 text-center">
-              <Award className="mx-auto mb-2 w-8 h-8 text-accent-500" />
-              <h3 className="font-semibold">Leaderboard</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+        <Link to='/leaderboard'>
+          <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+            <CardContent className='p-4 text-center'>
+              <Award className='mx-auto mb-2 w-8 h-8 text-accent-500' />
+              <h3 className='font-semibold'>Leaderboard</h3>
+              <p className='text-gray-600 dark:text-gray-400 text-sm'>
                 See rankings
               </p>
             </CardContent>
