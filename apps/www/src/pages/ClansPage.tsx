@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import { Search, Heart, Filter, TrendingUp, Users, Trophy } from "lucide-react";
+import { Search, Heart, Users, Trophy } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { cn, formatNumber } from "@/lib/utils";
 import {
@@ -12,19 +12,12 @@ import {
   useProfile,
   useUnfollowClan,
 } from "@/features";
-import { useQueryClient } from "@tanstack/react-query";
-
-type SortOption = "members" | "missions" | "newest";
-type FilterOption = "all" | "active" | "recruiting";
 
 export default function ClansPage() {
   const { data: clans } = useGetAllClans();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>("members");
-  const [filterBy, setFilterBy] = useState<FilterOption>("all");
 
-  // Consolidated filtering and sorting in useMemo
   const filteredClans = useMemo(() => {
     if (!clans?.clans) return [];
 
@@ -39,31 +32,8 @@ export default function ClansPage() {
       );
     }
 
-    // Apply category filter
-    if (filterBy === "active") {
-      filtered = filtered.filter((clan) => clan.missions_count > 0);
-    } else if (filterBy === "recruiting") {
-      filtered = filtered.filter((clan) => clan.member_count < 1000);
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case "members":
-          return b.member_count - a.member_count;
-        case "missions":
-          return b.missions_count - a.missions_count;
-        case "newest":
-          return (
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-        default:
-          return 0;
-      }
-    });
-
     return filtered;
-  }, [clans?.clans, searchTerm, sortBy, filterBy]);
+  }, [clans?.clans, searchTerm]);
 
   return (
     <div className="space-y-8">
@@ -108,34 +78,6 @@ export default function ClansPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
-
-        {/* Sort */}
-        <div className="relative">
-          <TrendingUp className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <select
-            className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-          >
-            <option value="members">Most Members</option>
-            <option value="missions">Most Missions</option>
-            <option value="newest">Newest First</option>
-          </select>
-        </div>
-
-        {/* Filter */}
-        <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <select
-            className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500"
-            value={filterBy}
-            onChange={(e) => setFilterBy(e.target.value as FilterOption)}
-          >
-            <option value="all">All Clans</option>
-            <option value="active">Active Clans</option>
-            <option value="recruiting">Recruiting</option>
-          </select>
         </div>
       </motion.div>
 

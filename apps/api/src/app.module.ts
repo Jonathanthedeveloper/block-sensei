@@ -9,6 +9,8 @@ import { PrismaModule } from 'nestjs-prisma';
 import { ClansModule } from './clans/clans.module';
 import { MissionsModule } from './missions/missions.module';
 import { SuiModule } from './sui/sui.module';
+import { UploadModule } from './upload/upload.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { SuiModule } from './sui/sui.module';
     ClansModule,
     MissionsModule,
     SuiModule,
+    UploadModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
