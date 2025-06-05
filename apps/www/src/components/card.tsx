@@ -3,6 +3,7 @@ import Button from "./button";
 import Price from "./price";
 import Time from "./time";
 import Logo from "../assets/Logo.png";
+import { ConnectButton } from "@mysten/dapp-kit";
 
 interface CardProps {
   imageUrl: string;
@@ -15,6 +16,7 @@ interface CardProps {
   onStartLesson?: (lessonId: string) => void;
   onContinueLesson?: (lessonId: string) => void;
   isLessonStarted?: boolean;
+  forConnect?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -24,6 +26,7 @@ const Card: React.FC<CardProps> = ({
   content,
   time,
   price,
+  forConnect,
 }) => {
   return (
     <div className='relative bg-gradient-to-r from-primary-500/30 to-secondary-500/30 p-[2px] rounded-2xl max-w-[252px] h-full'>
@@ -57,9 +60,15 @@ const Card: React.FC<CardProps> = ({
             alt='Logo'
             className='w-1/3 max-w-[80px] object-contain'
           />
-          <div className='flex-1'>
-            <Button title={btn} />
-          </div>
+          {forConnect ? (
+            <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'>
+              Start Now
+            </ConnectButton>
+          ) : (
+            <div className='flex-1'>
+              <Button title={btn} />
+            </div>
+          )}
         </div>
       </div>
     </div>

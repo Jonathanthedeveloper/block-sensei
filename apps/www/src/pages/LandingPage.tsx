@@ -362,9 +362,9 @@ export default function LandingPage() {
     <main className='bg-gray-900 min-h-screen text-white'>
       {/* Hero Section - Replaced with your code */}
       <div className='relative bg-gradient-to-b from-gray-900 to-primary-900 rounded-b-4xl'>
-        <div className='mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 max-w-7xl'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 max-w-7xl'>
           <nav className='relative flex justify-between items-center mb-16 sm:h-10'>
-            <div className='flex flex-grow lg:flex-grow-0 flex-shrink-0 items-center'>
+            <div className='flex flex-grow lg:flex-grow-0 flex-shrink-0 justify-between items-center w-full'>
               <div className='flex justify-between items-center w-full md:w-auto'>
                 <motion.a
                   href='#'
@@ -379,6 +379,9 @@ export default function LandingPage() {
                   </span>
                 </motion.a>
               </div>
+              <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'>
+                Start Now
+              </ConnectButton>
             </div>
           </nav>
 
@@ -424,7 +427,7 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Card imageUrl={Card_img} btn='Get Started' />
+              <Card forConnect imageUrl={Card_img} btn='Get Started' />
               <h3 className='font-semibold'>The Block Sensei Journey</h3>
               <div className='flex flex-wrap items-center place-content-center gap-1 px-5 w-full text-accent'>
                 <p>Basics</p>
