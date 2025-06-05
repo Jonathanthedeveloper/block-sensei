@@ -102,7 +102,7 @@ export default function QuestPage() {
     <div className='space-y-6'>
       {/* Navigation Bar */}
       <motion.div
-        className='flex items-center gap-4 mb-6'
+        className='flex md:flex-row flex-col md:items-center gap-2 md:gap-4 mb-6'
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -112,14 +112,16 @@ export default function QuestPage() {
             Mission Control
           </Button>
         </Link>
-        <Badge variant='primary' className='animate-pulse'>
-          <Flame className='mr-1 w-3 h-3' />
-          Live Mission
-        </Badge>
-        <Badge variant='secondary'>
-          <Users className='mr-1 w-3 h-3' />
-          {mission?.clan?.name}
-        </Badge>
+        <div>
+          <Badge variant='primary' className='animate-pulse'>
+            <Flame className='mr-1 w-3 h-3' />
+            Live Mission
+          </Badge>
+          <Badge variant='secondary'>
+            <Users className='mr-1 w-3 h-3' />
+            {mission?.clan?.name}
+          </Badge>
+        </div>
       </motion.div>
 
       {/* Mission Header */}
@@ -291,7 +293,8 @@ function RoundCard({
         )}
       >
         <CardContent className='p-6'>
-          <div className='flex items-start gap-4'>
+          <div className='flex sm:flex-row flex-col sm:items-start gap-4'>
+            {/* Step icon */}
             <div
               className={cn(
                 "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center",
@@ -313,8 +316,9 @@ function RoundCard({
               )}
             </div>
 
+            {/* Main content block */}
             <div className='flex-1 min-w-0'>
-              <div className='flex items-center gap-2 mb-2'>
+              <div className='flex md:flex-row flex-col items-start md:items-center gap-2 mb-2'>
                 <h3 className='font-bold text-gray-900 dark:text-white text-lg truncate'>
                   {round.title}
                 </h3>
@@ -330,7 +334,7 @@ function RoundCard({
                 {round.introduction}
               </p>
 
-              <div className='flex items-center gap-4 text-sm'>
+              <div className='flex flex-wrap items-center gap-4 text-sm'>
                 <Badge variant='secondary' size='sm'>
                   {round.quest?.type.replace("_", " ")}
                 </Badge>
@@ -341,9 +345,15 @@ function RoundCard({
               </div>
             </div>
 
-            <div className='flex-shrink-0'>
+            {/* Button block */}
+            <div className='sm:flex-shrink-0'>
               {isCompleted ? (
-                <Button variant='ghost' size='sm' disabled>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  disabled
+                  className='w-full sm:w-auto'
+                >
                   Completed
                 </Button>
               ) : isCurrent ? (
@@ -353,11 +363,17 @@ function RoundCard({
                   onClick={handleStartRound}
                   isLoading={startRound.isPending}
                   disabled={startRound.isPending}
+                  className='w-full sm:w-auto'
                 >
                   {isRoundStarted ? "Resume Round" : "Start Round"}
                 </Button>
               ) : (
-                <Button variant='outline' size='sm' disabled={isLocked}>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  disabled={isLocked}
+                  className='w-full sm:w-auto'
+                >
                   {isLocked ? "Locked" : "Start"}
                 </Button>
               )}
