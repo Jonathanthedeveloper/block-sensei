@@ -10,6 +10,7 @@ import {
   Edit3,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import Logo from "../../assets/logo.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -72,29 +73,29 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
 
   if (!isOpen && !isMobile) {
     return (
-      <div className="fixed top-0 left-0 h-screen w-16 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden lg:flex flex-col items-center py-8 ">
-        <div className="mb-8">
-          <Link to="/" className="flex items-center justify-center">
+      <div className='hidden top-0 left-0 fixed lg:flex flex-col items-center bg-white dark:bg-gray-800 py-8 border-gray-200 dark:border-gray-700 border-r w-16 h-screen'>
+        <div className='mb-8'>
+          <Link to='/' className='flex justify-center items-center'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-primary-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              xmlns='http://www.w3.org/2000/svg'
+              className='w-8 h-8 text-primary-600'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             >
-              <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z" />
-              <path d="M16 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M12 12a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M8 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M16 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M8 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
+              <path d='M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z' />
+              <path d='M16 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z' />
+              <path d='M12 12a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z' />
+              <path d='M8 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z' />
+              <path d='M16 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z' />
+              <path d='M8 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z' />
             </svg>
           </Link>
         </div>
-        <div className="flex flex-col items-center gap-4">
+        <div className='flex flex-col items-center gap-4'>
           {linkItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname.startsWith(item.href);
@@ -124,7 +125,7 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
       {/* Mobile backdrop */}
       {isMobile && isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className='lg:hidden z-40 fixed inset-0 bg-black/50'
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -138,37 +139,18 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
           isMobile ? "lg:hidden" : "hidden lg:flex"
         )}
       >
-        <div className="p-6">
+        <div className='p-6'>
           <Link
-            to="/"
-            className="flex items-center space-x-2"
+            to='/'
+            className='flex items-center space-x-2'
             onClick={closeSidebarIfMobile}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8 text-primary-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z" />
-              <path d="M16 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M12 12a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M8 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M16 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-              <path d="M8 8a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" />
-            </svg>
-            <span className="text-xl font-bold text-primary-600">
-              Block Sensei
-            </span>
+            <img src={Logo} alt='logo' />
           </Link>
         </div>
 
-        <div className="flex-1 px-4 py-6 overflow-auto">
-          <nav className="space-y-1">
+        <div className='flex-1 px-4 py-6 overflow-auto'>
+          <nav className='space-y-1'>
             {linkItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname.startsWith(item.href);
@@ -184,9 +166,9 @@ export default function Sidebar({ isOpen, setIsOpen, isMobile }: SidebarProps) {
                   )}
                   onClick={closeSidebarIfMobile}
                 >
-                  <Icon size={20} className="mr-3 flex-shrink-0" />
+                  <Icon size={20} className='flex-shrink-0 mr-3' />
                   <span>{item.name}</span>
-                  {isActive && <ArrowRight className="ml-auto h-4 w-4" />}
+                  {isActive && <ArrowRight className='ml-auto w-4 h-4' />}
                 </Link>
               );
             })}

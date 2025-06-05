@@ -41,7 +41,7 @@ export default function Dashboard() {
         )
       : 0;
 
-  if (!profile) return null;
+  if (profile) return null;
 
   const stats = [
     {
@@ -49,75 +49,75 @@ export default function Dashboard() {
       value: profile.mission_participations.filter(
         (participation) => participation.status === "COMPLETED"
       ).length,
-      icon: <Trophy className="h-6 w-6" />,
+      icon: <Trophy className='w-6 h-6' />,
       color: "from-primary-500 to-secondary-500",
       change: "+2 this week",
     },
     {
       title: "Quests Completed",
       value: 2,
-      icon: <Target className="h-6 w-6" />,
+      icon: <Target className='w-6 h-6' />,
       color: "from-secondary-500 to-accent-500",
       change: "+5 this week",
     },
     {
       title: "Achievements",
       value: 2,
-      icon: <Award className="h-6 w-6" />,
+      icon: <Award className='w-6 h-6' />,
       color: "from-accent-500 to-primary-500",
       change: "New badge unlocked!",
     },
     {
       title: "BLOCK Earned",
       value: 2,
-      icon: <Gift className="h-6 w-6" />,
+      icon: <Gift className='w-6 h-6' />,
       color: "from-success-500 to-primary-500",
       change: "+300 today",
     },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header with Level Progress */}
-      <div className="relative">
-        <motion.div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 opacity-10 rounded-lg" />
-        <div className="relative p-6 rounded-lg">
-          <div className="flex items-center justify-between mb-4">
+      <div className='relative'>
+        <motion.div className='absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 opacity-10 rounded-lg to-accent-500' />
+        <div className='relative p-6 rounded-lg'>
+          <div className='flex justify-between items-center mb-4'>
             <div>
               <motion.h1
-                className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2"
+                className='flex items-center gap-2 font-bold text-gray-900 dark:text-white text-2xl'
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
                 <span>Welcome back, Blockchain Explorer</span>
-                <Badge variant="primary" className="text-sm">
+                <Badge variant='primary' className='text-sm'>
                   Level {userLevel}
                 </Badge>
               </motion.h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
+              <p className='mt-1 text-gray-600 dark:text-gray-300'>
                 Your Sui adventure continues...
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-500" />
-              <span className="text-lg font-bold text-gray-900 dark:text-white">
+            <div className='flex items-center gap-2'>
+              <Star className='w-5 h-5 text-yellow-500' />
+              <span className='font-bold text-gray-900 dark:text-white text-lg'>
                 {formatNumber(profile.block_balance)} XP
               </span>
             </div>
           </div>
 
-          <div className="relative">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div className='relative'>
+            <div className='flex justify-between items-center mb-2'>
+              <span className='font-medium text-gray-600 dark:text-gray-400 text-sm'>
                 Progress to Level {userLevel + 1}
               </span>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">
+              <span className='font-medium text-gray-900 dark:text-white text-sm'>
                 {Math.round(levelProgress)}%
               </span>
             </div>
-            <Progress value={levelProgress} variant="primary" className="h-3" />
-            <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            <Progress value={levelProgress} variant='primary' className='h-3' />
+            <div className='mt-2 text-gray-500 dark:text-gray-400 text-xs'>
               {formatNumber(nextLevelPoints - profile.block_balance)} XP needed
               for next level
             </div>
@@ -127,7 +127,7 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className='gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -140,12 +140,12 @@ export default function Dashboard() {
             transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
             whileHover={{ scale: 1.02 }}
           >
-            <Card className="relative overflow-hidden group">
+            <Card className='group relative overflow-hidden'>
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
               />
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
+              <CardContent className='p-6'>
+                <div className='flex items-center gap-4'>
                   <div
                     className={cn(
                       "p-3 rounded-xl transition-transform duration-300 group-hover:scale-110",
@@ -155,13 +155,13 @@ export default function Dashboard() {
                     {stat.icon}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className='text-gray-500 dark:text-gray-400 text-sm'>
                       {stat.title}
                     </p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <p className='font-bold text-gray-900 dark:text-white text-2xl'>
                       {stat.value}
                     </p>
-                    <p className="text-xs text-primary-500 dark:text-primary-400 mt-1">
+                    <p className='mt-1 text-primary-500 dark:text-primary-400 text-xs'>
                       {stat.change}
                     </p>
                   </div>
@@ -185,41 +185,41 @@ export default function Dashboard() {
 function QuickActions() {
   return (
     <motion.div
-      className="grid grid-cols-1 md:grid-cols-3 gap-4"
+      className='gap-4 grid grid-cols-1 md:grid-cols-3'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.25 }}
     >
-      <Link to="/missions">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <Trophy className="h-8 w-8 text-primary-500 mx-auto mb-2" />
-            <h3 className="font-semibold">Start Mission</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+      <Link to='/missions'>
+        <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+          <CardContent className='p-4 text-center'>
+            <Trophy className='mx-auto mb-2 w-8 h-8 text-primary-500' />
+            <h3 className='font-semibold'>Start Mission</h3>
+            <p className='text-gray-600 dark:text-gray-400 text-sm'>
               Begin new adventure
             </p>
           </CardContent>
         </Card>
       </Link>
 
-      <Link to="/clans">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <Users className="h-8 w-8 text-secondary-500 mx-auto mb-2" />
-            <h3 className="font-semibold">Join Clan</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+      <Link to='/clans'>
+        <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+          <CardContent className='p-4 text-center'>
+            <Users className='mx-auto mb-2 w-8 h-8 text-secondary-500' />
+            <h3 className='font-semibold'>Join Clan</h3>
+            <p className='text-gray-600 dark:text-gray-400 text-sm'>
               Connect with others
             </p>
           </CardContent>
         </Card>
       </Link>
 
-      <Link to="/leaderboard">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-          <CardContent className="p-4 text-center">
-            <Award className="h-8 w-8 text-accent-500 mx-auto mb-2" />
-            <h3 className="font-semibold">Leaderboard</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+      <Link to='/leaderboard'>
+        <Card className='hover:shadow-lg transition-shadow cursor-pointer'>
+          <CardContent className='p-4 text-center'>
+            <Award className='mx-auto mb-2 w-8 h-8 text-accent-500' />
+            <h3 className='font-semibold'>Leaderboard</h3>
+            <p className='text-gray-600 dark:text-gray-400 text-sm'>
               See rankings
             </p>
           </CardContent>
@@ -235,20 +235,20 @@ function DailyChallenges() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="hidden"
+      className='hidden'
     >
-      <Card className="border-2 border-primary-100 dark:border-primary-800">
+      <Card className='border-2 border-primary-100 dark:border-primary-800'>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Flame className="h-5 w-5 text-primary-500" />
+          <div className='flex justify-between items-center'>
+            <CardTitle className='flex items-center gap-2'>
+              <Flame className='w-5 h-5 text-primary-500' />
               Daily Challenges
             </CardTitle>
-            <Badge variant="accent">3/5 Completed</Badge>
+            <Badge variant='accent'>3/5 Completed</Badge>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {[
               { title: "Complete 2 Quests", reward: 100, completed: true },
               { title: "Earn 500 BLOCK", reward: 150, completed: true },
@@ -265,15 +265,15 @@ function DailyChallenges() {
                     : "border-gray-200 dark:border-gray-700"
                 )}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                <div className='flex justify-between items-center'>
+                  <div className='flex items-center gap-3'>
                     {challenge.completed ? (
-                      <div className="h-8 w-8 rounded-full bg-success-100 dark:bg-success-900 flex items-center justify-center">
-                        <CheckCircle className="h-5 w-5 text-success-500" />
+                      <div className='flex justify-center items-center bg-success-100 dark:bg-success-900 rounded-full w-8 h-8'>
+                        <CheckCircle className='w-5 h-5 text-success-500' />
                       </div>
                     ) : (
-                      <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <Target className="h-5 w-5 text-gray-500" />
+                      <div className='flex justify-center items-center bg-gray-100 dark:bg-gray-800 rounded-full w-8 h-8'>
+                        <Target className='w-5 h-5 text-gray-500' />
                       </div>
                     )}
                     <span
@@ -287,9 +287,9 @@ function DailyChallenges() {
                       {challenge.title}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-primary-500" />
-                    <span className="font-medium text-primary-600 dark:text-primary-400">
+                  <div className='flex items-center gap-2'>
+                    <Gift className='w-4 h-4 text-primary-500' />
+                    <span className='font-medium text-primary-600 dark:text-primary-400'>
                       {challenge.reward} BLOCK
                     </span>
                   </div>
@@ -311,26 +311,26 @@ function ActiveMissions() {
   );
   return (
     <motion.div
-      className="space-y-4"
+      className='space-y-4'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
     >
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-primary-500" />
+      <div className='flex justify-between items-center'>
+        <h2 className='flex items-center gap-2 font-bold text-gray-900 dark:text-white text-xl'>
+          <Trophy className='w-5 h-5 text-primary-500' />
           Active Missions
         </h2>
-        <Link to="/missions">
-          <Button variant="ghost" size="sm">
+        <Link to='/missions'>
+          <Button variant='ghost' size='sm'>
             View All
-            <ArrowRight className="ml-1 h-4 w-4" />
+            <ArrowRight className='ml-1 w-4 h-4' />
           </Button>
         </Link>
       </div>
 
       {(activeMissionsParticipation?.length || 0) > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className='gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {activeMissionsParticipation?.map((missionParticipation, index) => {
             const mission = missionParticipation.mission;
 
@@ -362,49 +362,49 @@ function ActiveMissions() {
                 whileHover={{ scale: 1.02 }}
               >
                 <Link to={`/missions/${mission.id}`}>
-                  <Card className="group relative overflow-hidden border-2 border-transparent hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                  <Card className='group relative border-2 hover:border-primary-500 dark:hover:border-primary-400 border-transparent overflow-hidden transition-all duration-300'>
+                    <div className='top-0 left-0 absolute bg-gradient-to-r from-primary-500 via-secondary-500 w-full h-1 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 to-accent-500 transform' />
 
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                          <Trophy className="h-6 w-6 text-primary-500" />
+                    <CardContent className='p-6'>
+                      <div className='flex items-start gap-4'>
+                        <div className='flex flex-shrink-0 justify-center items-center bg-primary-100 dark:bg-primary-900/20 rounded-lg w-12 h-12 group-hover:scale-110 transition-transform'>
+                          <Trophy className='w-6 h-6 text-primary-500' />
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">
+                        <div className='flex-1'>
+                          <div className='flex items-center gap-2 mb-2'>
+                            <h3 className='font-medium text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors'>
                               {mission.title}
                             </h3>
-                            <Badge variant="accent" size="sm">
-                              <Gift className="w-3 h-3 mr-1" />
+                            <Badge variant='accent' size='sm'>
+                              <Gift className='mr-1 w-3 h-3' />
                               {reward.amount} {reward.token}
                             </Badge>
                           </div>
 
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                          <p className='mb-4 text-gray-500 dark:text-gray-400 text-sm'>
                             {mission.brief}
                           </p>
 
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-gray-600 dark:text-gray-400">
+                          <div className='space-y-3'>
+                            <div className='flex justify-between items-center text-sm'>
+                              <span className='text-gray-600 dark:text-gray-400'>
                                 Progress
                               </span>
-                              <span className="font-medium text-gray-900 dark:text-white">
+                              <span className='font-medium text-gray-900 dark:text-white'>
                                 {completionPercentage}%
                               </span>
                             </div>
                             <Progress
                               value={completionPercentage || 0}
-                              variant="primary"
-                              className="h-2 group-hover:h-3 transition-all duration-300"
+                              variant='primary'
+                              className='h-2 group-hover:h-3 transition-all duration-300'
                             />
-                            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                              <span className="flex items-center">
-                                <Clock className="w-4 h-4 mr-1" />2 hours left
+                            <div className='flex justify-between items-center text-gray-500 dark:text-gray-400 text-xs'>
+                              <span className='flex items-center'>
+                                <Clock className='mr-1 w-4 h-4' />2 hours left
                               </span>
-                              <span className="flex items-center">
-                                <Users className="w-4 h-4 mr-1" />
+                              <span className='flex items-center'>
+                                <Users className='mr-1 w-4 h-4' />
                                 {mission.clan?.name}
                               </span>
                             </div>
@@ -420,23 +420,23 @@ function ActiveMissions() {
         </div>
       ) : (
         <Card>
-          <CardContent className="py-12 text-center">
+          <CardContent className='py-12 text-center'>
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary-100 dark:bg-primary-900/20 mb-4"
+              className='flex justify-center items-center bg-primary-100 dark:bg-primary-900/20 mx-auto mb-4 rounded-full w-16 h-16'
             >
-              <Sparkles className="h-8 w-8 text-primary-500" />
+              <Sparkles className='w-8 h-8 text-primary-500' />
             </motion.div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            <h3 className='font-medium text-gray-900 dark:text-white text-lg'>
               Ready for a New Challenge?
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-1 mb-6">
+            <p className='mt-1 mb-6 text-gray-500 dark:text-gray-400'>
               Start a new mission to continue your learning journey
             </p>
-            <Link to="/missions">
-              <Button variant="primary" icon={<Trophy className="w-5 h-5" />}>
+            <Link to='/missions'>
+              <Button variant='primary' icon={<Trophy className='w-5 h-5' />}>
                 Find New Missions
               </Button>
             </Link>
@@ -450,17 +450,17 @@ function ActiveMissions() {
 function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
       {...props}
     >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
+      <path d='M22 11.08V12a10 10 0 1 1-5.93-9.14' />
+      <polyline points='22 4 12 14.01 9 11.01' />
     </svg>
   );
 }
@@ -468,17 +468,17 @@ function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
 function Clock(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
       {...props}
     >
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
+      <circle cx='12' cy='12' r='10' />
+      <polyline points='12 6 12 12 16 14' />
     </svg>
   );
 }

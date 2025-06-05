@@ -69,41 +69,41 @@ export default function QuestPage() {
 
   if (!mission && !isPending) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh]">
-        <HelpCircle className="h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+      <div className='flex flex-col justify-center items-center min-h-[50vh]'>
+        <HelpCircle className='mb-4 w-16 h-16 text-gray-400 dark:text-gray-600' />
+        <h2 className='mb-2 font-bold text-gray-900 dark:text-white text-xl'>
           Mission Not Found
         </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className='mb-6 text-gray-600 dark:text-gray-400'>
           Oops! This mission seems to have vanished into the blockchain...
         </p>
-        <Link to="/missions">
-          <Button variant="primary">Back to Mission Control</Button>
+        <Link to='/missions'>
+          <Button variant='primary'>Back to Mission Control</Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Navigation Bar */}
       <motion.div
-        className="flex items-center gap-4 mb-6"
+        className='flex items-center gap-4 mb-6'
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Link to="/missions">
-          <Button variant="ghost" size="sm" icon={<ArrowLeft size={16} />}>
+        <Link to='/missions'>
+          <Button variant='ghost' size='sm' icon={<ArrowLeft size={16} />}>
             Mission Control
           </Button>
         </Link>
-        <Badge variant="primary" className="animate-pulse">
-          <Flame className="w-3 h-3 mr-1" />
+        <Badge variant='primary' className='animate-pulse'>
+          <Flame className='mr-1 w-3 h-3' />
           Live Mission
         </Badge>
-        <Badge variant="secondary">
-          <Users className="w-3 h-3 mr-1" />
+        <Badge variant='secondary'>
+          <Users className='mr-1 w-3 h-3' />
           {mission?.clan?.name}
         </Badge>
       </motion.div>
@@ -114,24 +114,24 @@ export default function QuestPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="relative overflow-hidden border-2 border-primary-200 dark:border-primary-800">
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500" />
+        <Card className='relative border-2 border-primary-200 dark:border-primary-800 overflow-hidden'>
+          <div className='top-0 left-0 absolute bg-gradient-to-r from-primary-500 via-secondary-500 w-full h-2 to-accent-500' />
 
-          <div className="relative h-48 bg-gradient-to-br from-primary-600 to-secondary-600 overflow-hidden">
+          <div className='relative bg-gradient-to-br from-primary-600 to-secondary-600 h-48 overflow-hidden'>
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMikiIHN0cm9rZS13aWR0aD0iMiIvPjwvZz48L3N2Zz4=')] opacity-10" />
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className='absolute inset-0 flex justify-center items-center'>
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative"
+                className='relative'
               >
-                <Trophy className="h-24 w-24 text-white opacity-90" />
+                <Trophy className='opacity-90 w-24 h-24 text-white' />
               </motion.div>
             </div>
-            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/60 to-transparent py-6 px-6">
+            <div className='bottom-0 absolute bg-gradient-to-t from-black/60 to-transparent px-6 py-6 w-full'>
               <motion.h1
-                className="text-3xl font-bold text-white mb-2"
+                className='mb-2 font-bold text-white text-3xl'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
@@ -139,7 +139,7 @@ export default function QuestPage() {
                 {mission?.title}
               </motion.h1>
               <motion.p
-                className="text-white/80"
+                className='text-white/80'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
@@ -149,33 +149,33 @@ export default function QuestPage() {
             </div>
           </div>
 
-          <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="flex items-center">
-                    <Trophy className="w-4 h-4 mr-1 text-primary-500" />
+          <CardContent className='pt-6'>
+            <div className='flex md:flex-row flex-col md:items-center gap-6 mb-6'>
+              <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-4 text-gray-600 dark:text-gray-400 text-sm'>
+                  <div className='flex items-center'>
+                    <Trophy className='mr-1 w-4 h-4 text-primary-500' />
                     <span>
                       {reward.amount} {reward.token}
                     </span>
                   </div>
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1 text-secondary-500" />
+                  <div className='flex items-center'>
+                    <Clock className='mr-1 w-4 h-4 text-secondary-500' />
                     <span>{missionDuration}</span>
                   </div>
-                  <div className="flex items-center">
-                    <Target className="w-4 h-4 mr-1 text-accent-500" />
+                  <div className='flex items-center'>
+                    <Target className='mr-1 w-4 h-4 text-accent-500' />
                     <span>{mission?.mission_rounds.length} Rounds</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className='flex-1'>
+                <div className='flex justify-between items-center mb-2'>
+                  <span className='font-medium text-gray-700 dark:text-gray-300 text-sm'>
                     Mission Progress
                   </span>
-                  <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                  <span className='font-medium text-primary-600 dark:text-primary-400 text-sm'>
                     {currentRoundIndex + 1} of {mission?.mission_rounds.length}{" "}
                     Rounds
                   </span>
@@ -186,9 +186,9 @@ export default function QuestPage() {
                       (mission?.mission_rounds?.length || 1)) *
                     100
                   }
-                  variant="primary"
-                  size="lg"
-                  className="h-3"
+                  variant='primary'
+                  size='lg'
+                  className='h-3'
                 />
               </div>
             </div>
@@ -201,7 +201,7 @@ export default function QuestPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid gap-4"
+        className='gap-4 grid'
       >
         {mission?.mission_rounds.map((round, index) => (
           <RoundCard
@@ -278,66 +278,66 @@ function RoundCard({
           isCompleted && "bg-primary-50 dark:bg-primary-900/20"
         )}
       >
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
+        <CardContent className='p-6'>
+          <div className='flex items-start gap-4'>
             <div
               className={cn(
                 "flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center",
                 isCompleted
                   ? "bg-primary-100 dark:bg-primary-900"
                   : isCurrent
-                    ? "bg-secondary-100 dark:bg-secondary-900"
-                    : "bg-gray-100 dark:bg-gray-800"
+                  ? "bg-secondary-100 dark:bg-secondary-900"
+                  : "bg-gray-100 dark:bg-gray-800"
               )}
             >
               {isCompleted ? (
-                <CheckCircle className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                <CheckCircle className='w-6 h-6 text-primary-600 dark:text-primary-400' />
               ) : isLocked ? (
-                <Lock className="w-6 h-6 text-gray-400 dark:text-gray-600" />
+                <Lock className='w-6 h-6 text-gray-400 dark:text-gray-600' />
               ) : (
-                <span className="text-xl font-bold text-secondary-600 dark:text-secondary-400">
+                <span className='font-bold text-secondary-600 dark:text-secondary-400 text-xl'>
                   {index + 1}
                 </span>
               )}
             </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">
+            <div className='flex-1 min-w-0'>
+              <div className='flex items-center gap-2 mb-2'>
+                <h3 className='font-bold text-gray-900 dark:text-white text-lg truncate'>
                   {round.title}
                 </h3>
                 {round.quest && (
-                  <Badge variant="accent" size="sm">
-                    <Gift className="w-3 h-3 mr-1" />
+                  <Badge variant='accent' size='sm'>
+                    <Gift className='mr-1 w-3 h-3' />
                     {round.quest.reward.amount} {round.quest.reward.token}
                   </Badge>
                 )}
               </div>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <p className='mb-4 text-gray-600 dark:text-gray-400 text-sm'>
                 {round.introduction}
               </p>
 
-              <div className="flex items-center gap-4 text-sm">
-                <Badge variant="secondary" size="sm">
+              <div className='flex items-center gap-4 text-sm'>
+                <Badge variant='secondary' size='sm'>
                   {round.quest?.type.replace("_", " ")}
                 </Badge>
-                <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                  <Clock className="w-4 h-4 mr-1" />
+                <span className='flex items-center text-gray-500 dark:text-gray-400'>
+                  <Clock className='mr-1 w-4 h-4' />
                   15 min
                 </span>
               </div>
             </div>
 
-            <div className="flex-shrink-0">
+            <div className='flex-shrink-0'>
               {isCompleted ? (
-                <Button variant="ghost" size="sm" disabled>
+                <Button variant='ghost' size='sm' disabled>
                   Completed
                 </Button>
               ) : isCurrent ? (
                 <Button
-                  variant="primary"
-                  size="sm"
+                  variant='primary'
+                  size='sm'
                   onClick={handleStartRound}
                   isLoading={startRound.isPending}
                   disabled={startRound.isPending}
@@ -345,7 +345,7 @@ function RoundCard({
                   {isRoundStarted ? "Resume Round" : "Start Round"}
                 </Button>
               ) : (
-                <Button variant="outline" size="sm" disabled={isLocked}>
+                <Button variant='outline' size='sm' disabled={isLocked}>
                   {isLocked ? "Locked" : "Start"}
                 </Button>
               )}
@@ -354,7 +354,7 @@ function RoundCard({
         </CardContent>
 
         {isCurrent && (
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500" />
+          <div className='bottom-0 left-0 absolute bg-gradient-to-r from-primary-500 via-secondary-500 w-full h-1 to-accent-500' />
         )}
       </Card>
     </motion.div>
