@@ -9,7 +9,7 @@ import Card from "../components/card";
 import Card_img from "../assets/card_img1.png";
 import Divider from "../components/divider";
 import sui from "../assets/sui.png";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/Logo.png";
 
 export default function LandingPage() {
   const navigate = useNavigate();
