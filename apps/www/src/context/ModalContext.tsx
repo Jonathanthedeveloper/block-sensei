@@ -10,13 +10,13 @@ export type ModalType =
   | "transfer"
   | null;
 
-// Define modal props interfaces
 interface ConfirmationModalProps {
   title?: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
+  onCloseCallback?: () => void;
 }
 
 interface RewardModalProps {
@@ -33,6 +33,7 @@ interface BalanceModalProps {
   walletAddress?: string;
   currency?: string;
   image?: string;
+  onCloseCallback?: () => void;
 }
 
 interface TransferModalProps {
@@ -43,6 +44,7 @@ interface TransferModalProps {
     amount: number
   ) => Promise<{ success: boolean; error?: string }>;
   image?: string;
+  onCloseCallback?: () => void;
 }
 
 // Union type for all modal props
@@ -58,6 +60,7 @@ interface ModalContextType {
   modalType: ModalType;
   modalProps: any;
   openModal: (type: ModalType, props?: any) => void;
+
   closeModal: () => void;
 }
 
@@ -83,6 +86,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const closeModal = () => {
     setIsOpen(false);
 
+    // Execute the onCloseCallback provided by the specific modal type
     if (
       modalProps.onCloseCallback &&
       typeof modalProps.onCloseCallback === "function"
@@ -93,7 +97,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     setTimeout(() => {
       setModalType(null);
       setModalProps({});
-    }, 300);
+    }, 300); // Adjust this delay to match your modal's exit animation
   };
 
   return (

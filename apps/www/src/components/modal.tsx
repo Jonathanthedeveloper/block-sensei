@@ -1,9 +1,9 @@
 "use client";
 
-import type React from "react";
-import { useEffect, type ReactNode } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
+import { type ReactNode } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { motion } from "framer-motion";
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,29 +22,8 @@ const Modal = ({
   size = "md",
   showCloseButton = true,
 }: ModalProps) => {
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "auto";
-    };
-  }, [isOpen, onClose]);
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
+  // Radix UI handles `createPortal` and keyboard events (Escape) automatically.
+  // We no longer need the useEffect for `handleEscape` or `document.body.style.overflow`.
 
   const sizeClasses = {
     sm: "max-w-sm",
@@ -52,29 +31,28 @@ const Modal = ({
     lg: "max-w-lg",
   };
 
-  // Define animation variants for the backdrop
-  const backdropVariants = {
+  // Framer Motion variants
+  const overlayVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
     exit: { opacity: 0 },
   };
 
-  // Define animation variants for the modal content
-  const modalVariants = {
-    hidden: { y: "-100vh", opacity: 0, scale: 0.5 }, // Start from top, faded, smaller
+  const contentVariants = {
+    hidden: { y: "-100vh", opacity: 0, scale: 0.5 },
     visible: {
-      y: "0", // Come to center
+      y: "0",
       opacity: 1,
       scale: 1,
       transition: {
         duration: 0.3,
-        type: "spring", // Spring for a bouncy feel
+        type: "spring",
         damping: 25,
         stiffness: 500,
       },
     },
     exit: {
-      y: "100vh", // Exit to bottom
+      y: "100vh",
       opacity: 0,
       scale: 0.5,
       transition: {
@@ -83,53 +61,61 @@ const Modal = ({
     },
   };
 
-  return createPortal(
-    <AnimatePresence>
-      {" "}
-      {/* Wrap with AnimatePresence */}
-      {isOpen && ( // Conditionally render the motion components based on isOpen
+  return (
+    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+      <Dialog.Portal>
         <motion.div
-          className='z-50 fixed inset-0 flex justify-center items-center bg-[#333333E0] backdrop-blur-sm p-4'
-          onClick={handleBackdropClick}
-          variants={backdropVariants} // Apply backdrop variants
+          className='z-50 fixed inset-0 bg-[#333333E0] backdrop-blur-sm'
+          variants={overlayVariants}
           initial='hidden'
           animate='visible'
           exit='exit'
         >
-          <motion.div
-            className={`dark:bg-primary-100 bg-primary-900 rounded-2xl shadow-2xl ${sizeClasses[size]} w-full border border-gray-800`}
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-            variants={modalVariants} // Apply modal content variants
-            initial='hidden'
-            animate='visible'
-            exit='exit'
+          <Dialog.Overlay className='absolute inset-0' />
+        </motion.div>
+        <motion.div
+          className='z-50 fixed inset-0 flex justify-center items-center p-4'
+          variants={contentVariants}
+          initial='hidden'
+          animate='visible'
+          exit='exit'
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Dialog.Content
+            className={`
+              dark:bg-primary-100 bg-primary-900 rounded-2xl shadow-2xl
+              ${sizeClasses[size]} w-full border border-gray-800
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500
+              relative
+            `}
           >
             {/* Header */}
             {(title || showCloseButton) && (
               <div className='flex justify-between items-center p-6 border-gray-800 border-b'>
                 {title && (
-                  <h3 className='font-semibold text-gray-400 dark:text-gray-600 text-lg'>
+                  <Dialog.Title className='font-semibold text-gray-400 dark:text-gray-600 text-lg'>
                     {title}
-                  </h3>
+                  </Dialog.Title>
                 )}
                 {showCloseButton && (
-                  <button
-                    onClick={onClose}
-                    className='font-light text-gray-400 dark:text-gray-600 text-xl'
-                  >
-                    ×
-                  </button>
+                  <Dialog.Close asChild>
+                    <button
+                      className='font-light text-gray-400 dark:text-gray-600 text-xl'
+                      aria-label='Close'
+                    >
+                      <Cross2Icon />
+                    </button>
+                  </Dialog.Close>
                 )}
               </div>
             )}
 
             {/* Content */}
             <div className='p-6'>{children}</div>
-          </motion.div>
+          </Dialog.Content>
         </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 

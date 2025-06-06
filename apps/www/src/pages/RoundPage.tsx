@@ -269,7 +269,8 @@ export default function RoundPage() {
                     <Button
                       type='button'
                       variant='outline'
-                      onClick={() => setShowQuiz(false)}
+                      onClick={() => handleOpenReward()}
+                      // onClick={() => setShowQuiz(false)}
                     >
                       Review Content
                     </Button>
