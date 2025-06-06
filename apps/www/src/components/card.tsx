@@ -61,9 +61,10 @@ const Card: React.FC<CardProps> = ({
             className='w-1/3 max-w-[80px] object-contain'
           />
           {forConnect ? (
-            <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'>
-              Start Now
-            </ConnectButton>
+            <ConnectButton
+              connectText={btn}
+              className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'
+            />
           ) : (
             <div className='flex-1'>
               <Button title={btn} />

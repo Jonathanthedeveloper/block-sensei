@@ -105,10 +105,7 @@ export default function LandingPage() {
                   <img src={Logo} alt='logo' />
                 </motion.a>
               </div>
-              <ConnectButton
-                connectText='Start Now'
-                className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer'
-              />
+              <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer' />
             </div>
           </nav>
 
