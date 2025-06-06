@@ -83,8 +83,8 @@ const Modal = ({
         >
           <Dialog.Content
             className={`
-              dark:bg-primary-100 bg-primary-900 rounded-2xl shadow-2xl
-              ${sizeClasses[size]} w-full border border-gray-800
+             bg-gradient-to-br to-primary-50 dark:to-primary-900/20 border-2 border-accent-100 dark:border-accent-800 from-accent-50 dark:from-accent-900/20
+              ${sizeClasses[size]} w-full border rounded-xl
               focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500
               relative
             `}
@@ -93,14 +93,14 @@ const Modal = ({
             {(title || showCloseButton) && (
               <div className='flex justify-between items-center p-6 border-gray-800 border-b'>
                 {title && (
-                  <Dialog.Title className='font-semibold text-gray-400 dark:text-gray-600 text-lg'>
+                  <Dialog.Title className='font-semibold text-gray-900 dark:text-white text-lg'>
                     {title}
                   </Dialog.Title>
                 )}
                 {showCloseButton && (
                   <Dialog.Close asChild>
                     <button
-                      className='font-light text-gray-400 dark:text-gray-600 text-xl'
+                      className='font-light text-gray-900 dark:text-white text-xl'
                       aria-label='Close'
                     >
                       <Cross2Icon />
