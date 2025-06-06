@@ -1,11 +1,22 @@
 {
-  "name": "block sensei",
+  "name": "block-sensei",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm run build:api && pnpm run build:www",
+    "build:api": "pnpm --filter=api build",
+    "build:www": "pnpm --filter=www build",
+    "start:prod": "pnpm --filter=api start:prod",
+    "deploy:api": "pnpm --filter=api prisma:deploy && pnpm --filter=api start:prod",
+    "prisma:generate": "pnpm --filter=api exec prisma generate",
+    "prisma:migrate": "pnpm --filter=api exec prisma migrate deploy",
+    "prisma:push": "pnpm --filter=api exec prisma db push"
   },
   "keywords": [],
   "author": "",
