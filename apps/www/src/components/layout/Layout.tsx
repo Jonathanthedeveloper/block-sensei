@@ -41,18 +41,18 @@ export default function Layout() {
 
   if (isPending) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background-dark text-foreground-dark">
-        <div className="animate-spin-slow h-16 w-16">
+      <div className='flex justify-center items-center bg-background-dark h-screen text-foreground-dark'>
+        <div className='w-16 h-16 animate-spin-slow'>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           >
-            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z" />
+            <path d='M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z' />
           </svg>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className='flex bg-gray-50 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100'>
       {/* Only show sidebar on desktop */}
       {!isMobile && (
         <Sidebar
@@ -70,7 +70,7 @@ export default function Layout() {
         />
       )}
 
-      <div className="flex flex-col flex-1">
+      <div className='flex flex-col flex-1'>
         <Navbar
           toggleSidebar={toggleSidebar}
           isSidebarOpen={isSidebarOpen}
@@ -78,9 +78,11 @@ export default function Layout() {
         />
 
         <main
-          className={`flex-1 p-4 sm:p-6 transition-all duration-200 ${isSidebarOpen && !isMobile ? "lg:ml-64" : ""} pb-20 lg:pb-6`}
+          className={`flex-1 p-4 sm:p-6 transition-all duration-200 ${
+            isSidebarOpen && !isMobile ? "lg:ml-64" : ""
+          } pb-20 lg:pb-6`}
         >
-          <div className="mx-auto max-w-7xl">
+          <div className='mx-auto max-w-7xl'>
             <Outlet />
           </div>
         </main>

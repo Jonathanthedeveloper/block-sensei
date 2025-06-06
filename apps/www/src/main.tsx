@@ -10,6 +10,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import SuiWalletProvider from "./providers/SuiWalletProvider.tsx";
 import "@mysten/dapp-kit/dist/index.css";
 import "@mdxeditor/editor/style.css";
+import { ModalProvider } from "./context/ModalContext.tsx";
+import ModalContainer from "./components/modalContainer.tsx";
 
 const queryClient = new QueryClient();
 
@@ -18,12 +20,15 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ThemeProvider>
         <ToastProvider>
-          <QueryClientProvider client={queryClient}>
-            <SuiWalletProvider>
-              <App />
-            </SuiWalletProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
+          <ModalProvider>
+            <QueryClientProvider client={queryClient}>
+              <SuiWalletProvider>
+                <App />
+                <ModalContainer />
+              </SuiWalletProvider>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          </ModalProvider>
         </ToastProvider>
       </ThemeProvider>
     </BrowserRouter>

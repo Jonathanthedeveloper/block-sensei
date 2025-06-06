@@ -13,6 +13,8 @@ import {
 } from "@/features";
 import { useMemo } from "react";
 import { AllMissions } from "@/services/api";
+import Coin from "../assets/coin.png";
+import Logo from "../assets/Logo.png";
 
 export default function MissionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,53 +51,53 @@ export default function MissionsPage() {
   }, [allMissions?.missions, searchTerm, sortOrder]);
 
   return (
-    <div className="space-y-6">
-      <header className="mb-8">
+    <div className='space-y-6'>
+      <header className='mb-8'>
         <motion.h1
-          className="text-2xl font-bold text-gray-900 dark:text-white"
+          className='font-bold text-gray-900 dark:text-white text-2xl'
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           Missions
         </motion.h1>
-        <p className="text-gray-600 dark:text-gray-300 mt-1">
+        <p className='mt-1 text-gray-600 dark:text-gray-300'>
           Complete missions to earn rewards and enhance your blockchain
           knowledge
         </p>
       </header>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
+        className='gap-4 grid grid-cols-1 md:grid-cols-4 mb-6'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+        <div className='relative'>
+          <div className='left-0 absolute inset-y-0 flex items-center pl-3 pointer-events-none'>
+            <Search className='w-5 h-5 text-gray-400' />
           </div>
           <input
-            type="text"
-            placeholder="Search missions..."
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            type='text'
+            placeholder='Search missions...'
+            className='block bg-white dark:bg-gray-700 py-2 pr-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 w-full text-gray-900 dark:text-white placeholder-gray-500'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         <button
-          className="flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+          className='flex justify-center items-center bg-white hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200'
           onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
         >
-          <ArrowUpDown className="h-5 w-5 mr-2" />
+          <ArrowUpDown className='mr-2 w-5 h-5' />
           <span>{sortOrder === "asc" ? "Oldest First" : "Newest First"}</span>
         </button>
       </motion.div>
 
       {filteredMissions.length > 0 ? (
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className='gap-3 md:gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -105,15 +107,15 @@ export default function MissionsPage() {
           ))}
         </motion.div>
       ) : (
-        <Card variant="bordered">
-          <CardContent className="py-12 text-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 dark:bg-gray-800">
-              <Search className="h-6 w-6 text-gray-500" />
+        <Card variant='bordered'>
+          <CardContent className='py-12 text-center'>
+            <div className='flex justify-center items-center bg-gray-100 dark:bg-gray-800 mx-auto rounded-full w-12 h-12'>
+              <Search className='w-6 h-6 text-gray-500' />
             </div>
-            <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white">
+            <h3 className='mt-2 font-medium text-gray-900 dark:text-white text-lg'>
               No missions found
             </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className='mt-1 text-gray-500 dark:text-gray-400 text-sm'>
               Try adjusting your search filters
             </p>
           </CardContent>
@@ -218,90 +220,102 @@ function MissionCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
       whileHover={{ scale: 1.02 }}
-      className="group"
+      className='group'
       onClick={handleStartMission}
-      role="button"
+      role='button'
       tabIndex={0}
     >
-      <Card className="relative overflow-hidden border-2 border-transparent group-hover:border-primary-500 transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+      <Card className='relative bg-gradient-to-br from-white dark:from-gray-800 to-gray-50 dark:to-gray-900 border-2 group-hover:border-primary-500 border-transparent overflow-hidden transition-all duration-300'>
+        <div className='top-0 left-0 absolute bg-gradient-to-r from-primary-500 via-secondary-500 w-full h-1 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 to-accent-500 transform' />
 
-        <CardContent className="pt-6">
+        <CardContent className='pt-6'>
+          {/* Mission Stats */}
+          <div className='flex flex-wrap justify-between items-center gap-2 mb-4 text-sm'>
+            <div className='flex items-center bg-gradient-to-r to-secondary-500 px-3 py-2 rounded-full text-black from-accent-400'>
+              {/* <Trophy className='mr-1 w-4 h-4' /> */}
+              <img src={Coin} alt='coin' className='mr-1 w-4 h-4' />
+              <span className='whitespace-nowrap'>
+                {reward.amount} {reward.token}
+              </span>
+            </div>
+            <div className='flex items-center bg-primary-500 px-3 py-2 rounded-full text-white'>
+              <Clock className='mr-1 w-4 h-4' />
+              <span className='whitespace-nowrap'>{missionDuration}</span>
+            </div>
+          </div>
+
           {/* Mission Title & Clan */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          <div className='flex justify-between items-start mb-4'>
+            <div className='flex-1'>
+              <h3 className='font-bold text-gray-900 dark:group-hover:text-primary-400 dark:text-white group-hover:text-primary-600 text-xl transition-colors'>
                 {mission.title}
               </h3>
-              <div className="flex items-center mt-2">
+              <div className='flex items-center mt-2'>
                 <Badge
-                  variant="secondary"
-                  size="sm"
-                  className="flex items-center"
+                  variant='secondary'
+                  size='sm'
+                  className='flex items-center'
                 >
-                  <Users className="w-3 h-3 mr-1" />
+                  <Users className='mr-1 w-3 h-3' />
                   {mission.clan?.name || "Unknown Clan"}
                 </Badge>
               </div>
             </div>
             {completionPercentage === 100 && (
-              <div className="flex items-center justify-center w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full">
-                <Trophy className="w-4 h-4 text-green-600 dark:text-green-400" />
+              <div className='flex justify-center items-center bg-green-100 dark:bg-green-900 rounded-full w-8 h-8'>
+                <Trophy className='w-4 h-4 text-green-600 dark:text-green-400' />
               </div>
             )}
           </div>
 
           {/* Mission Brief */}
-          <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-2">
+          <p className='mb-6 text-gray-600 dark:text-gray-400 text-center md:text-start line-clamp-2'>
             {mission.brief}
           </p>
 
           {/* Progress & Rewards Section */}
-          <div className="space-y-4">
+          <div className='space-y-4'>
             {/* Progress Bar - Show only if mission is started */}
 
             {participatedMission?.status === "IN_PROGRESS" && (
               <div>
-                <div className="flex items-center justify-between mb-2 text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">
+                <div className='flex justify-between items-center mb-2 text-sm'>
+                  <span className='text-gray-600 dark:text-gray-400'>
                     Progress
                   </span>
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className='font-medium text-gray-900 dark:text-white'>
                     {completionPercentage}%
                   </span>
                 </div>
                 <Progress
                   value={completionPercentage}
-                  variant="primary"
-                  className="h-2 group-hover:h-3 transition-all duration-300"
+                  variant='primary'
+                  className='h-2 group-hover:h-3 transition-all duration-300'
                 />
               </div>
             )}
 
-            {/* Mission Stats */}
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center text-gray-600 dark:text-gray-400">
-                <Trophy className="w-4 h-4 mr-1" />
-                <span>
-                  {reward.amount} {reward.token}
-                </span>
+            {/* Action Button */}
+            <div className='flex md:flex-row flex-col md:justify-between md:items-center gap-4 mt-4'>
+              <div className='flex justify-center md:justify-start'>
+                <img
+                  src={Logo}
+                  alt='coin'
+                  className='w-20 max-w-[80px] object-contain'
+                />
               </div>
-              <div className="flex items-center text-gray-600 dark:text-gray-400">
-                <Clock className="w-4 h-4 mr-1" />
-                <span>{missionDuration}</span>
+              <div className='w-full md:w-auto'>
+                <Button
+                  isLoading={startMission.isPending}
+                  fullWidth
+                  variant={buttonProps?.variant}
+                  className='group-hover:shadow-lg transition-shadow duration-300 cursor-pointer'
+                  disabled={startMission.isPending}
+                >
+                  {startMission.isPending ? "" : buttonProps?.text}
+                </Button>
               </div>
             </div>
-
-            {/* Action Button */}
-            <Button
-              isLoading={startMission.isPending}
-              fullWidth
-              variant={buttonProps?.variant}
-              className="cursor-pointer mt-4 group-hover:shadow-lg transition-shadow duration-300"
-              disabled={startMission.isPending}
-            >
-              {startMission.isPending ? "" : buttonProps?.text}
-            </Button>
           </div>
         </CardContent>
       </Card>

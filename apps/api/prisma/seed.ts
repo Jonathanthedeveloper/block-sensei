@@ -1,4 +1,20 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
+// const prisma = new PrismaClient();
+// async function main() {}
+// main()
+//   .then(async () => {
+//     await prisma.$disconnect();
+//   })
+//   .catch(async (e) => {
+//     console.error(e);
+//     await prisma.$disconnect();
+//     process.exit(1);
+//   });
+
+// apps/api/prisma/seed.ts
+
+import { PrismaClient, QuestType, MissionStatus } from '@prisma/client';
+
 const prisma = new PrismaClient();
 async function main() {
   const data: { id: string; content: string }[] = [
