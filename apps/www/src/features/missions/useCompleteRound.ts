@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { completeRound } from "@/services/api";
 import type { ICompleteRound } from "@/types";
 
-export const useCompleteRound = () => {
+export const useCompleteRound = (options?: { onSuccess?: () => void }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,6 +19,7 @@ export const useCompleteRound = () => {
       queryClient.invalidateQueries({ queryKey: ["missionProgress"] });
       queryClient.invalidateQueries({ queryKey: ["missionLeaderboard"] });
       queryClient.invalidateQueries({ queryKey: ["userMissions"] });
+      options?.onSuccess?.();
     },
   });
 };

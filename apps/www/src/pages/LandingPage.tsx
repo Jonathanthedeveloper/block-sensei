@@ -1,9 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sword, Trophy, Users, Award, Star, Gift, Crown } from "lucide-react";
+import { Sword, Trophy, Users, Award } from "lucide-react";
 import { useAccounts, ConnectButton } from "@mysten/dapp-kit";
 import { useLogin } from "@/features";
 import { useEffect } from "react";
+
+import Card from "../components/card";
+import Card_img from "../assets/card_img1.png";
+import Divider from "../components/divider";
+import sui from "../assets/sui.png";
+import Logo from "../assets/Logo.png";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -27,51 +33,52 @@ export default function LandingPage() {
     }
   }, [accounts, login, navigate]);
 
-  const stats = [
-    {
-      icon: <Trophy className="h-8 w-8 text-yellow-500" />,
-      value: "50K+",
-      label: "Active Players",
-      color: "from-yellow-500/20 to-orange-500/20",
-    },
-    {
-      icon: <Gift className="h-8 w-8 text-purple-500" />,
-      value: "1M+",
-      label: "BLOCK Earned",
-      color: "from-purple-500/20 to-pink-500/20",
-    },
-    {
-      icon: <Star className="h-8 w-8 text-blue-500" />,
-      value: "100K+",
-      label: "Quests Completed",
-      color: "from-blue-500/20 to-cyan-500/20",
-    },
-  ];
+  // Original stats and features from the provided LandingPage (kept in case you want to reintroduce them or parts of them)
+  // const stats = [
+  //   {
+  //     icon: <Trophy className='w-8 h-8 text-yellow-500' />,
+  //     value: "50K+",
+  //     label: "Active Players",
+  //     color: "from-yellow-500/20 to-orange-500/20",
+  //   },
+  //   {
+  //     icon: <Gift className='w-8 h-8 text-purple-500' />,
+  //     value: "1M+",
+  //     label: "BLOCK Earned",
+  //     color: "from-purple-500/20 to-pink-500/20",
+  //   },
+  //   {
+  //     icon: <Star className='w-8 h-8 text-blue-500' />,
+  //     value: "100K+",
+  //     label: "Quests Completed",
+  //     color: "from-blue-500/20 to-cyan-500/20",
+  //   },
+  // ];
 
   const features = [
     {
-      icon: <Users className="h-12 w-12" />,
+      icon: <Users className='w-12 h-12' />,
       title: "Join Web3 Clans",
       description: "Team up with fellow adventurers in specialized Web3 clans",
       color: "from-blue-600 to-indigo-600",
       delay: 0.2,
     },
     {
-      icon: <Trophy className="h-12 w-12" />,
+      icon: <Trophy className='w-12 h-12' />,
       title: "Complete Missions",
       description: "Embark on exciting missions to earn rewards and level up",
       color: "from-purple-600 to-pink-600",
       delay: 0.3,
     },
     {
-      icon: <Sword className="h-12 w-12" />,
+      icon: <Sword className='w-12 h-12' />,
       title: "Battle Challenges",
       description: "Test your skills in daily challenges and competitions",
       color: "from-orange-600 to-red-600",
       delay: 0.4,
     },
     {
-      icon: <Award className="h-12 w-12" />,
+      icon: <Award className='w-12 h-12' />,
       title: "Earn NFT Rewards",
       description:
         "Collect unique badges and certificates on the Sui blockchain",
@@ -81,121 +88,91 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-primary-900 to-gray-900">
-      {/* Hero Section */}
-      <div className="relative">
-        {/* Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-          <nav className="relative flex items-center justify-between sm:h-10 mb-16">
-            <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-              <div className="flex items-center justify-between w-full md:w-auto">
+    <main className='bg-gray-900 min-h-screen text-white'>
+      {/* Hero Section - Replaced with your code */}
+      <div className='relative bg-gradient-to-b from-gray-900 to-primary-900 rounded-b-4xl'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12 max-w-7xl'>
+          <nav className='relative flex justify-between items-center mb-16 sm:h-10'>
+            <div className='flex flex-grow lg:flex-grow-0 flex-shrink-0 justify-between items-center w-full'>
+              <div className='flex justify-between items-center w-full md:w-auto'>
                 <motion.a
-                  href="#"
-                  className="flex items-center space-x-3"
+                  href='#'
+                  className='flex items-center space-x-3'
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Crown className="h-12 w-12 text-primary-400" />
-                  <span className="text-3xl font-bold text-white font-display">
-                    Block Sensei
-                  </span>
+                  <img src={Logo} alt='logo' />
                 </motion.a>
               </div>
+              <ConnectButton className='flex justify-center items-center gap-4 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full text-light text-white text-sm cursor-pointer' />
             </div>
           </nav>
 
-          <div className="relative z-10">
+          {/* Your main content for the hero section */}
+          <motion.div
+            className='flex flex-col justify-center items-center gap-12 bg-gradient-to-b from-transparent to-primary mt-20 rounded-bl-4xl rounded-br-4xl'
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              className='flex items-center gap-4 border border-primary rounded-full text-light text-sm cursor-pointer'
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <motion.h1
-                className="text-5xl sm:text-7xl font-bold tracking-tight text-white mb-6 font-display"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                Master Web3 Skills
-                <span className="block text-gradient bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400">
-                  The Fun Way
-                </span>
-              </motion.h1>
-
-              <motion.p
-                className="max-w-2xl mx-auto text-xl text-gray-300 mb-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                Join the ultimate Web3 learning adventure. Complete missions,
-                earn rewards, and become a blockchain master!
-              </motion.p>
-
-              <motion.p
-                className="max-w-2xl mx-auto text-lg text-primary-400 mb-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                Powered by the Sui blockchain
-              </motion.p>
-
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                <ConnectButton className="min-w-[200px] bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:shadow-lg transition-all duration-300">
-                  Start Your Journey
-                </ConnectButton>
-              </motion.div>
+              <div className='flex justify-between items-center gap-2 px-4 py-2 cursor-pointer'>
+                <img src={sui} alt='sui' />
+                <h3>Built On Sui</h3>
+              </div>
             </motion.div>
 
-            {/* Stats */}
             <motion.div
-              className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-3"
-              initial={{ opacity: 0, y: 20 }}
+              className='flex flex-col items-center gap-4 px-4 text-center'
+              initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                >
-                  <div className="relative mx-auto w-16 h-16 mb-4">
-                    <div className="absolute inset-0 bg-white/10 rounded-lg rotate-6" />
-                    <div className="absolute inset-0 bg-white/20 rounded-lg -rotate-3" />
-                    <div
-                      className={`relative bg-gradient-to-br ${stat.color} rounded-lg p-3`}
-                    >
-                      {stat.icon}
-                    </div>
-                  </div>
-                  <div className="text-4xl font-bold text-white mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gray-400">{stat.label}</div>
-                </motion.div>
-              ))}
+              <h1 className='font-Sora font-bold text-4xl'>
+                Learn Web3 the Fun Way — Guided by Your Sensei.
+              </h1>
+              <p>
+                Web 3 is hard, we make it simple through a gamified interactive
+                learning experience that simplifies Web3 and rewards learners{" "}
+                <br />
+                by letting them earn in Web 3 while learning.
+              </p>
             </motion.div>
-          </div>
+
+            <motion.div
+              className='flex flex-col items-center gap-2 text-xs'
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              <Card forConnect imageUrl={Card_img} btn='Get Started' />
+              <h3 className='font-semibold'>The Block Sensei Journey</h3>
+              <div className='flex flex-wrap items-center place-content-center gap-1 px-5 w-full text-accent'>
+                <p>Basics</p>
+                <Divider />
+                <p> Do Web 3 Stuff</p>
+                <Divider />
+                <p>Advanced</p>
+                <Divider />
+                <p>NFT Certificates</p>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Features */}
-      <div className="relative bg-gray-900 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      {/* Features Section (Original from his code - kept for structure) */}
+      <div className='relative bg-gray-900 py-20'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
+          <div className='mb-16 text-center'>
             <motion.h2
-              className="text-3xl font-bold text-white mb-4 font-display"
+              className='mb-4 font-display font-bold text-white text-3xl'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -203,7 +180,7 @@ export default function LandingPage() {
               Your Adventure Awaits
             </motion.h2>
             <motion.p
-              className="text-xl text-gray-400"
+              className='text-gray-400 text-xl'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -212,30 +189,30 @@ export default function LandingPage() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className='gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
             {features.map((feature) => (
               <motion.div
                 key={feature.title}
-                className="relative group"
+                className='group relative'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: feature.delay }}
               >
-                <div className="relative p-6 bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-600/20 to-secondary-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className='relative bg-white/5 backdrop-blur-sm p-6 rounded-xl h-60 md:h-64 overflow-hidden'>
+                  <div className='absolute inset-0 bg-gradient-to-br from-primary-600/20 to-secondary-600/20 opacity-0 group-hover:opacity-100 transition-opacity' />
 
-                  <div className="relative">
-                    <div className="mb-4 inline-block">
+                  <div className='relative'>
+                    <div className='inline-block mb-4'>
                       <div
                         className={`relative p-3 rounded-lg bg-gradient-to-br ${feature.color}`}
                       >
                         {feature.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">
+                    <h3 className='mb-2 font-bold text-white text-xl'>
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400">{feature.description}</p>
+                    <p className='text-gray-400'>{feature.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -244,27 +221,38 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="relative bg-gradient-to-b from-gray-900 to-primary-900">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+      {/* CTA Section (Original from his code - kept for structure) */}
+      <div className='relative bg-gradient-to-b from-gray-900 to-primary-900 rounded-b-4xl'>
+        <div className='mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 max-w-7xl'>
           <motion.div
-            className="text-center"
+            className='text-center'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl mb-4 font-display">
+            <h2 className='mb-4 font-display font-bold text-white text-3xl sm:text-4xl tracking-tight'>
               Ready to Begin Your Adventure?
             </h2>
-            <p className="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
+            <p className='mx-auto mb-8 max-w-2xl text-gray-400 text-lg'>
               Connect your Sui wallet and start earning rewards today!
             </p>
-            <ConnectButton className="bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 hover:shadow-lg transition-all duration-300">
+            <ConnectButton className='bg-gradient-to-r from-primary-500 via-secondary-500 hover:shadow-lg transition-all duration-300 to-accent-500'>
               Start Now
             </ConnectButton>
           </motion.div>
         </div>
       </div>
-    </div>
+
+      {/* Your Footer */}
+      <motion.div
+        className='flex flex-col items-center gap-2 py-6 text-gray-400 text-light text-sm'
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <p>Group 1 Project</p>
+        <p>All Rights Reserved. Copyright © Group 1</p>
+      </motion.div>
+    </main>
   );
 }
