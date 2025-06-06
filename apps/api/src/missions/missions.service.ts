@@ -694,6 +694,7 @@ export class MissionsService {
                 wallet_address: true,
               },
             },
+            mission: true,
           },
         },
         mission_round: {
@@ -722,92 +723,104 @@ export class MissionsService {
       throw new NotFoundException('Quest not found for this round');
     }
 
-    return this.prisma.$transaction(async (prisma) => {
-      let completionStatus: 'COMPLETED' | 'FAILED' = 'COMPLETED';
-      let questAnswers: any[] = [];
+    return this.prisma.$transaction(
+      async (prisma) => {
+        let completionStatus: 'COMPLETED' | 'FAILED' = 'COMPLETED';
+        let questAnswers: any[] = [];
 
-      // Handle completion based on quest type
-      if (quest.type === 'QUIZ') {
-        const result = await this.handleQuizCompletion(
-          prisma,
-          roundProgress,
-          quest,
-          data.quiz_answers || [],
-        );
-        completionStatus = 'COMPLETED';
-        questAnswers = result.questAnswers;
-      } else {
-        // For non-quiz quests, completion is typically automatic or verified externally
-        // TODO: Implement specific completion logic for each quest type:
-        // - VISIT_SITE: Verify URL visit through tracking pixels or callbacks
-        // - WATCH_VIDEO: Verify video completion through player events
-        // - SOCIAL_ACTION: Verify social media interactions (likes, shares, follows)
-        // - BLOCKCHAIN_ACTION: Verify on-chain transactions or interactions
-        // - USER_CONTENT: Review and approve user submissions (posts, comments, etc.)
-        // - REFERRALS: Track successful referral completions and user signups
-        // - TRACKER: Monitor achievement of specific metrics or goals
-        completionStatus = 'COMPLETED';
-      }
+        // Handle completion based on quest type
+        if (quest.type === 'QUIZ') {
+          const result = await this.handleQuizCompletion(
+            prisma,
+            roundProgress,
+            quest,
+            data.quiz_answers || [],
+          );
+          completionStatus = 'COMPLETED';
+          questAnswers = result.questAnswers;
+        } else {
+          // For non-quiz quests, completion is typically automatic or verified externally
+          // TODO: Implement specific completion logic for each quest type:
+          // - VISIT_SITE: Verify URL visit through tracking pixels or callbacks
+          // - WATCH_VIDEO: Verify video completion through player events
+          // - SOCIAL_ACTION: Verify social media interactions (likes, shares, follows)
+          // - BLOCKCHAIN_ACTION: Verify on-chain transactions or interactions
+          // - USER_CONTENT: Review and approve user submissions (posts, comments, etc.)
+          // - REFERRALS: Track successful referral completions and user signups
+          // - TRACKER: Monitor achievement of specific metrics or goals
+          completionStatus = 'COMPLETED';
+        }
 
-      // Update round progress status
-      const updatedProgress = await prisma.roundProgress.update({
-        where: { id: roundProgress.id },
-        data: {
-          status: completionStatus,
-          completed_at: new Date(),
-        },
-        include: {
-          participation: {
-            include: {
-              mission: {
-                include: {
-                  mission_rounds: true,
+        // Update round progress status
+        const updatedProgress = await prisma.roundProgress.update({
+          where: { id: roundProgress.id },
+          data: {
+            status: completionStatus,
+            completed_at: new Date(),
+          },
+          include: {
+            participation: {
+              include: {
+                mission: {
+                  include: {
+                    mission_rounds: true,
+                  },
                 },
               },
             },
-          },
-          quest_answers: true,
-        },
-      });
-
-      // Send rewards to wallet
-      await this.suiService.sendBlocks(
-        roundProgress.participation.user.wallet_address,
-        quest.reward.amount,
-      );
-
-      // Check if all rounds in the mission are completed
-      const allRoundsProgress = await prisma.roundProgress.findMany({
-        where: {
-          participation_id: roundProgress.participation.id,
-        },
-      });
-
-      const allRoundsCompleted = allRoundsProgress.every(
-        (rp) => rp.status === 'COMPLETED',
-      );
-
-      // Update mission participation status if all rounds completed
-      if (allRoundsCompleted) {
-        await prisma.missionParticipation.update({
-          where: { id: roundProgress.participation.id },
-          data: {
-            status: 'COMPLETED',
-            completed_at: new Date(),
+            quest_answers: true,
           },
         });
 
-        await this.suiService.mintCertificate();
-      }
+        // Send rewards to wallet
+        await this.suiService.mintBlock({
+          recipient: roundProgress.participation.user.wallet_address,
+          amount: quest.reward.amount,
+        });
 
-      return {
-        roundProgress: updatedProgress,
-        questType: quest.type,
-        completionStatus,
-        missionCompleted: allRoundsCompleted,
-        questAnswers,
-      };
-    });
+        // Check if all rounds in the mission are completed
+        const allRoundsProgress = await prisma.roundProgress.findMany({
+          where: {
+            participation_id: roundProgress.participation.id,
+          },
+        });
+
+        const allRoundsCompleted = allRoundsProgress.every(
+          (rp) => rp.status === 'COMPLETED',
+        );
+
+        // Update mission participation status if all rounds completed
+        if (allRoundsCompleted) {
+          await prisma.missionParticipation.update({
+            where: { id: roundProgress.participation.id },
+            data: {
+              status: 'COMPLETED',
+              completed_at: new Date(),
+            },
+          });
+
+          await this.suiService.mintCertificate({
+            completedAt: new Date(),
+            description: roundProgress.participation.mission.brief,
+            imageUrl: 'd',
+            missionId: roundProgress.participation.mission.id,
+            recipient: roundProgress.participation.user.wallet_address,
+            title: roundProgress.participation.mission.title,
+          });
+        }
+
+        return {
+          roundProgress: updatedProgress,
+          questType: quest.type,
+          completionStatus,
+          missionCompleted: allRoundsCompleted,
+          questAnswers,
+        };
+      },
+      {
+        timeout: 30000,
+      },
+    );
   }
 
   private async handleQuizCompletion(
