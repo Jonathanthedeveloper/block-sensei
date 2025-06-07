@@ -22,9 +22,7 @@ export class MissionsService {
     private readonly suiService: SuiService,
     private readonly imageGeneratorService: ImageGeneratorService,
     private readonly cloudinaryService: CloudinaryService,
-  ) {
-
-  }
+  ) {}
 
   // Create mission with rounds and nested quests/rewards
   async createMissionWithRounds(data: CreateMissionWithRoundsDto) {
