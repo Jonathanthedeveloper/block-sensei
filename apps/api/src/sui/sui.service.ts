@@ -46,7 +46,7 @@ export class SuiService implements OnModuleInit {
       'SUI_ADMIN_CAPABILITY_ID',
     )!;
     this.treasuryCapId = this.configService.get<string>(
-      'SUI_TREASURY_CAPALITY_ID',
+      'SUI_TREASURY_CAPABILITY_ID',
     )!;
 
     // Initialize the keypair from the secret key stored in environment variables

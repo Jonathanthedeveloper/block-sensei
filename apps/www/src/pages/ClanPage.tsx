@@ -13,6 +13,7 @@ import {
   useProfile,
   useUnfollowClan,
 } from "@/features";
+import { toast } from "sonner";
 
 export default function ClanPage() {
   const { clanId } = useParams<{ clanId: string }>();
@@ -29,9 +30,17 @@ export default function ClanPage() {
     if (!clanId) return;
 
     if (isFollowingClan) {
-      unFollowClan.mutate(clanId);
+      unFollowClan.mutate(clanId, {
+        onSuccess() {
+          toast.success("Clan unfollowed successfully!");
+        },
+      });
     } else {
-      followClan.mutate(clanId);
+      followClan.mutate(clanId, {
+        onSuccess() {
+          toast.success("Clan followed successfully!");
+        },
+      });
     }
   }
 

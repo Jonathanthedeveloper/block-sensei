@@ -12,6 +12,7 @@ import {
   useProfile,
   useUnfollowClan,
 } from "@/features";
+import { toast } from "sonner";
 
 export default function ClansPage() {
   const { data: clans } = useGetAllClans();
@@ -125,9 +126,23 @@ function ClanCard({ clan, index }: { clan: any; index: number }) {
     e.stopPropagation();
 
     if (isFollowingClan) {
-      unFollowClan.mutate(clan.id);
+      unFollowClan.mutate(clan.id, {
+        onSuccess() {
+          toast.success("Unfollowed clan successfully");
+        },
+        onError() {
+          toast.error("Failed to unfollow clan");
+        },
+      });
     } else {
-      followClan.mutate(clan.id);
+      followClan.mutate(clan.id, {
+        onSuccess() {
+          toast.success("Followed clan successfully");
+        },
+        onError() {
+          toast.error("Failed to follow clan");
+        },
+      });
     }
   }
 
