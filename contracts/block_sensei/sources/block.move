@@ -1,6 +1,7 @@
 module block_sensei::block;
 
 use sui::coin::{Self, TreasuryCap};
+use sui::url::new_unsafe_from_bytes;
 
 // Define Token
 public struct BLOCK has drop {}
@@ -17,7 +18,7 @@ fun init(witness: BLOCK, ctx: &mut TxContext) {
         b"BLOCK",
         b"Block",
         b"Token for gamified learning platform",
-        option::some(new_unsafe_from_bytes()),
+        option::some(new_unsafe_from_bytes(b"https://block-sensei-www.onrender.com/logo.png")),
         ctx,
     );
     transfer::public_freeze_object(metadata);

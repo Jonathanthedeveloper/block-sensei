@@ -1,25 +1,42 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Card, CardHeader, CardContent } from "../components/ui/Card";
-import Avatar from "../components/ui/Avatar";
-import Button from "../components/ui/Button";
-import { formatAddress, formatNumber, cn } from "../lib/utils";
-import { Copy, Award, Trophy, Wallet, Gift, LogOut } from "lucide-react";
+import { Card, CardHeader, CardContent } from "@/components/ui/Card";
+import Avatar from "@/components/ui/Avatar";
+import Button from "@/components/ui/Button";
+import { formatAddress, formatNumber, cn } from "@/lib/utils";
+import {
+  Copy,
+  Award,
+  Trophy,
+  Wallet,
+  Gift,
+  LogOut,
+  ExternalLink,
+} from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useProfile } from "@/features";
 import { useNavigate } from "react-router-dom";
 import { useDisconnectWallet } from "@mysten/dapp-kit";
+import { useCertificates } from "@/features/missions/useCertificates";
+import { useWithdrawBlock } from "@/features/profile/useWithdrawBlock";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const withdrawSchema = z.object({
+  amount: z.coerce.number().min(1, "Amount must be greater than 0"),
+  recipient: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]{64}$/, "Invalid wallet address format"),
+});
 
 export default function ProfilePage() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
   const disconnectWallet = useDisconnectWallet();
+  const { data: certificates } = useCertificates();
 
-  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   if (!profile) return null;
 
@@ -40,19 +57,6 @@ export default function ProfilePage() {
 
   const copyAddress = () => {
     navigator.clipboard.writeText(profile.wallet_address);
-  };
-
-  const handleWithdraw = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsWithdrawing(true);
-
-    // Simulate withdrawal
-    setTimeout(() => {
-      setIsWithdrawing(false);
-      setIsWithdrawModalOpen(false);
-      setWithdrawAmount("");
-      setWalletAddress("");
-    }, 2000);
   };
 
   const handleLogout = () => {
@@ -100,15 +104,7 @@ export default function ProfilePage() {
               </div>
 
               <div className="md:ml-auto flex gap-3">
-                <Button
-                  className="cursor-pointer text-sm sm:text-base"
-                  variant="primary"
-                  size="lg"
-                  onClick={() => setIsWithdrawModalOpen(true)}
-                  icon={<Wallet className="w-5 h-5" />}
-                >
-                  Withdraw BLOCK
-                </Button>
+                <WithdrawBlockModal />
                 <Button
                   variant="outline"
                   size="lg"
@@ -169,7 +165,7 @@ export default function ProfilePage() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Card className="dark:bg-gray-900 dark:border-gray-800">
-          <Tabs.Root defaultValue="badges">
+          <Tabs.Root defaultValue="certificates">
             <CardHeader className="border-b dark:border-gray-800">
               <div className="flex items-center justify-between">
                 <Tabs.List className="flex space-x-1">
@@ -183,7 +179,7 @@ export default function ProfilePage() {
                   >
                     <div className="flex items-center gap-2">
                       <Trophy className="w-4 h-4" />
-                      <span>Badges (3)</span>
+                      <span>Badges</span>
                     </div>
                   </Tabs.Trigger>
                   <Tabs.Trigger
@@ -196,7 +192,9 @@ export default function ProfilePage() {
                   >
                     <div className="flex items-center gap-2">
                       <Award className="w-4 h-4" />
-                      <span>NFT Certificates (0)</span>
+                      <span>
+                        NFT Certificates ({certificates?.length || 0})
+                      </span>
                     </div>
                   </Tabs.Trigger>
                 </Tabs.List>
@@ -210,153 +208,242 @@ export default function ProfilePage() {
                     YOUR BADGES
                   </h2>
                   <p className="text-gray-400">
-                    All your awesome Badges are displayed here. Something to
+                    All your awesome Badges will be displayed here. Something to
                     brag about! 😎
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                  {/* Example Badges */}
-                  {[
-                    {
-                      name: "Mission Solver x1",
-                      image: "🏅",
-                      color: "bg-gray-700",
-                    },
-                    {
-                      name: "Bits Seeker x1000",
-                      image: "🌟",
-                      color: "bg-yellow-600",
-                    },
-                    {
-                      name: "Friend Collector x5",
-                      image: "👥",
-                      color: "bg-blue-600",
-                    },
-                  ].map((badge, index) => (
-                    <motion.div
-                      key={index}
-                      className="group"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <div
-                        className={`relative aspect-square rounded-2xl ${badge.color} p-6 flex flex-col items-center justify-center text-center transition-transform group-hover:shadow-xl`}
-                      >
-                        <div className="text-4xl mb-2">{badge.image}</div>
-                        <h3 className="text-white text-sm font-medium">
-                          {badge.name}
-                        </h3>
-                        <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                <div className="text-center">Coming Soon! 🚧</div>
               </Tabs.Content>
 
               <Tabs.Content value="certificates">
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Award className="w-10 h-10 text-gray-600" />
-                  </div>
-                  <h3 className="text-xl font-medium text-white mb-2">
-                    No Certificates Yet
-                  </h3>
-                  <p className="text-gray-400">
-                    Complete missions to earn NFT certificates!
-                  </p>
-                </div>
+                <CertificatesDisplay />
               </Tabs.Content>
             </CardContent>
           </Tabs.Root>
         </Card>
       </motion.div>
+    </div>
+  );
+}
 
-      {/* Withdraw Modal */}
-      <Dialog.Root
-        open={isWithdrawModalOpen}
-        onOpenChange={setIsWithdrawModalOpen}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
-          <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl z-50 p-6 focus:outline-none">
-            <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-              Withdraw BLOCK
-            </Dialog.Title>
+function WithdrawBlockModal() {
+  const { data: profile } = useProfile();
+  const [open, setOpen] = useState(false);
 
-            <form onSubmit={handleWithdraw}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Amount
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      max={profile.block_balance}
-                      value={withdrawAmount}
-                      onChange={(e) => setWithdrawAmount(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      placeholder="Enter amount"
-                    />
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                      <span className="text-gray-500 dark:text-gray-400">
-                        BLOCK
-                      </span>
-                    </div>
-                  </div>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Available: {formatNumber(profile.block_balance)} BLOCK
-                  </p>
-                </div>
+  const form = useForm({
+    resolver: zodResolver(withdrawSchema),
+    defaultValues: {
+      amount: 0,
+      recipient: "",
+    },
+  });
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Destination Address
-                  </label>
+  const withdraw = useWithdrawBlock();
+
+  function onSubmit(data: z.infer<typeof withdrawSchema>) {
+    console.log("Withdrawing BLOCK:", data);
+    withdraw.mutate(
+      {
+        amount: data.amount,
+        recipientAddress: data.recipient,
+      },
+      {
+        onSuccess: () => {
+          setOpen(false);
+          form.reset();
+        },
+        onError: (error) => {
+          console.error("Withdrawal error:", error);
+        },
+      }
+    );
+  }
+
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild>
+        <Button
+          className="cursor-pointer text-sm sm:text-base"
+          variant="primary"
+          size="lg"
+          icon={<Wallet className="w-5 h-5" />}
+        >
+          Withdraw BLOCK
+        </Button>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl z-50 p-6 focus:outline-none">
+          <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+            Withdraw BLOCK
+          </Dialog.Title>
+
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Amount
+                </label>
+                <div className="relative">
                   <input
-                    type="text"
+                    type="number"
                     required
-                    value={walletAddress}
-                    onChange={(e) => setWalletAddress(e.target.value)}
+                    min="1"
+                    step="0.000000001"
+                    max={profile?.block_balance}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="Enter SUI wallet address"
+                    placeholder="Enter amount"
+                    {...form.register("amount")}
                   />
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                    <span className="text-gray-500 dark:text-gray-400">
+                      BLOCK
+                    </span>
+                  </div>
                 </div>
-
-                <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-100 dark:border-primary-800">
-                  <h4 className="font-medium text-primary-900 dark:text-primary-100 mb-2">
-                    Withdrawal Information
-                  </h4>
-                  <ul className="space-y-2 text-sm text-primary-700 dark:text-primary-300 list-disc list-inside">
-                    <li>Minimum withdrawal: 1 BLOCK</li>
-                    <li>No withdrawal fees</li>
-                  </ul>
-                </div>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Available: {formatNumber(profile?.block_balance || 0)} BLOCK
+                </p>
+                <button
+                  type="button"
+                  className="mt-1 text-xs text-primary-500 hover:text-primary-600"
+                  onClick={() =>
+                    form.setValue("amount", profile?.block_balance || 0)
+                  }
+                >
+                  Use max amount
+                </button>
               </div>
 
-              <div className="mt-6 flex justify-end gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Destination Address
+                </label>
+                <input
+                  type="text"
+                  required
+                  {...form.register("recipient")}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Enter SUI wallet address (0x...)"
+                />
+                <button
+                  type="button"
+                  className="mt-1 text-xs text-primary-500 hover:text-primary-600"
+                  onClick={() =>
+                    form.setValue("recipient", profile?.wallet_address || "")
+                  }
+                >
+                  Use my wallet address
+                </button>
+              </div>
+
+              <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-100 dark:border-primary-800">
+                <h4 className="font-medium text-primary-900 dark:text-primary-100 mb-2">
+                  Withdrawal Information
+                </h4>
+                <ul className="space-y-2 text-sm text-primary-700 dark:text-primary-300 list-disc list-inside">
+                  <li>Minimum withdrawal: 1 BLOCK</li>
+                  <li>
+                    Tokens will be sent to the specified address on the Sui
+                    network
+                  </li>
+                  <li>Transaction may take a few moments to process</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Dialog.Close asChild>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setIsWithdrawModalOpen(false)}
+                  disabled={withdraw.isPending}
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  isLoading={isWithdrawing}
-                  disabled={!withdrawAmount || !walletAddress}
-                  icon={<Wallet className="w-4 h-4" />}
-                >
-                  Confirm Withdrawal
-                </Button>
-              </div>
-            </form>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+              </Dialog.Close>
+              <Button
+                type="submit"
+                isLoading={withdraw.isPending}
+                disabled={
+                  !form.watch("amount") ||
+                  !form.watch("recipient") ||
+                  withdraw.isPending
+                }
+                icon={<Wallet className="w-4 h-4" />}
+              >
+                Confirm Withdrawal
+              </Button>
+            </div>
+          </form>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
+
+function CertificatesDisplay() {
+  const { data: certificates } = useCertificates();
+
+  return (certificates?.length || 0) > 0 ? (
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6">
+      {certificates?.map((certificate) => (
+        <motion.div
+          key={certificate.id}
+          className="group"
+          whileHover={{ scale: 1.03 }}
+        >
+          <div className="bg-gradient-to-br from-primary-900/50 to-secondary-900/50 rounded-xl overflow-hidden border border-white/10 shadow-lg">
+            {/* Square aspect ratio container */}
+            <div className="aspect-square relative overflow-hidden">
+              {certificate.imageUrl ? (
+                <img
+                  src={certificate.imageUrl}
+                  alt={certificate.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-primary-800/50">
+                  <Award className="w-16 h-16 text-primary-400" />
+                </div>
+              )}
+              
+              
+            </div>
+
+            <div className="p-3 flex justify-between items-center bg-black/30">
+              <span className="text-xs text-gray-400">
+                {new Date(
+                  parseInt(certificate.completedAt) * 1000
+                ).toLocaleDateString()}
+              </span>
+              <a
+                href={`https://suiscan.xyz/testnet/object/${certificate.objectId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-xs text-primary-400 hover:text-primary-300 transition-colors"
+              >
+                <span>View on Sui</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  ) : (
+    <div className="text-center py-12">
+      <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+        <Award className="w-12 h-12 text-gray-600" />
+      </div>
+      <h3 className="text-xl font-medium text-white mb-2">
+        No Certificates Yet
+      </h3>
+      <p className="text-gray-400">
+        Complete missions to earn NFT certificates!
+      </p>
     </div>
   );
 }

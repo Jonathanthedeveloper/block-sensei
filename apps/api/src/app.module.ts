@@ -11,6 +11,7 @@ import { MissionsModule } from './missions/missions.module';
 import { SuiModule } from './sui/sui.module';
 import { UploadModule } from './upload/upload.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ImageGeneratorModule } from './image-generator/image-generator.module';
 import joi from 'joi';
 
 @Module({
@@ -28,7 +29,7 @@ import joi from 'joi';
         DATABASE_URL: joi.string().required(),
         SUI_PACKAGE_ID: joi.string().required(),
         SUI_ADMIN_CAPABILITY_ID: joi.string().required(),
-        SUI_TREASURY_CAPALITY_ID: joi.string().required(),
+        SUI_TREASURY_CAPABILITY_ID: joi.string().required(),
         PRIVATE_KEY: joi.string().required(),
       }),
     }),
@@ -42,6 +43,7 @@ import joi from 'joi';
     SuiModule,
     UploadModule,
     CloudinaryModule,
+    ImageGeneratorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

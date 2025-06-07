@@ -1,9 +1,9 @@
-import { useTheme } from "../../context/ThemeContext";
-import { Sun, Moon, Bell, Menu as MenuIcon, X } from "lucide-react";
-import { formatNumber } from "../../lib/utils";
+import { useTheme } from "@/context/ThemeContext";
+import { Sun, Moon, Menu as MenuIcon, X } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import Coin from "../../assets/coin.png";
-import Logo from "../../assets/Logo.png";
+import Coin from "@/assets/coin.png";
+import Logo from "@/assets/Logo.png";
 import { useProfile } from "@/features";
 
 interface NavbarProps {
@@ -36,7 +36,10 @@ export default function Navbar({
 
             {/* Logo - only show on mobile */}
             {isMobile && (
-              <Link to="/" className="flex items-center space-x-2">
+              <Link
+                to="/"
+                className="flex items-center space-x-2 w-20 sm:w-auto"
+              >
                 <img src={Logo} alt="logo" />
               </Link>
             )}
@@ -50,13 +53,8 @@ export default function Navbar({
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            <button className="relative hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-full text-gray-700 dark:text-gray-300">
-              <Bell size={20} />
-              <span className="block top-0 right-0 absolute bg-primary-600 rounded-full w-2 h-2"></span>
-            </button>
-
             {/* BLOCK Balance */}
-            <div className="hidden sm:flex items-center gap-2 bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-lg">
+            <div className="flex items-center gap-2 bg-primary-50 dark:bg-primary-900/20 px-3 py-1.5 rounded-lg">
               <img src={Coin} alt="coin" className="w-4 h-4" />
               <span className="font-medium text-primary-700 dark:text-primary-300">
                 {formatNumber(profile?.block_balance || 0)} BLOCKS

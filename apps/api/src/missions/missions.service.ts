@@ -11,13 +11,29 @@ import { StartRoundDto } from './dtos/start-round.dto';
 import { CompleteRoundDto } from './dtos/complete-round.dto';
 import { Prisma } from '@prisma/client';
 import { SuiService } from 'src/sui/sui.service';
+import { ImageGeneratorService } from 'src/image-generator/image-generator.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import fs from 'node:fs';
 
 @Injectable()
 export class MissionsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly suiService: SuiService,
-  ) {}
+    private readonly imageGeneratorService: ImageGeneratorService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {
+    const image = this.imageGeneratorService.generateCertificateImage(
+      '0x63b99eef88c80ba801084a1341cdcf48e71e8bace91e817800e08cbe13414e1a',
+      'mission title',
+    );
+
+    // Save the image to a file
+    fs.writeFileSync(
+      'certificate.txt',
+      `data:image/png;base64,${image.toString('base64')}`,
+    );
+  }
 
   // Create mission with rounds and nested quests/rewards
   async createMissionWithRounds(data: CreateMissionWithRoundsDto) {
@@ -124,7 +140,7 @@ export class MissionsService {
     });
   }
 
-  async getAllMissions(page: number = 1, limit: number = 10) {
+  async getAllMissions(page: number = 1, limit: number = 1000) {
     const skip = (page - 1) * limit;
 
     const [missions, total] = await Promise.all([
@@ -494,7 +510,7 @@ export class MissionsService {
   async getMissionsByClan(
     clanId: string,
     page: number = 1,
-    limit: number = 10,
+    limit: number = 1000,
   ) {
     // Verify clan exists
     const clan = await this.prisma.clan.findUnique({
@@ -723,6 +739,18 @@ export class MissionsService {
       throw new NotFoundException('Quest not found for this round');
     }
 
+    // generate image for the mission certificate
+    const certificateImage =
+      this.imageGeneratorService.generateCertificateImage(
+        roundProgress.participation.user.wallet_address,
+        roundProgress.participation.mission.title,
+      );
+
+    // Convert the buffer to a base64 string
+    const base64Image = certificateImage.toString('base64');
+
+    const certificateDataUri = `data:image/png;base64,${base64Image}`;
+
     return this.prisma.$transaction(
       async (prisma) => {
         let completionStatus: 'COMPLETED' | 'FAILED' = 'COMPLETED';
@@ -752,7 +780,7 @@ export class MissionsService {
         }
 
         // Update round progress status
-        const updatedProgress = await prisma.roundProgress.update({
+        const updatedProgressPromise = prisma.roundProgress.update({
           where: { id: roundProgress.id },
           data: {
             status: completionStatus,
@@ -773,10 +801,15 @@ export class MissionsService {
         });
 
         // Send rewards to wallet
-        await this.suiService.mintBlock({
+        const mintBlockRewardPromise = this.suiService.mintBlock({
           recipient: roundProgress.participation.user.wallet_address,
           amount: quest.reward.amount,
         });
+
+        const [updatedProgress] = await Promise.all([
+          updatedProgressPromise,
+          mintBlockRewardPromise,
+        ]);
 
         // Check if all rounds in the mission are completed
         const allRoundsProgress = await prisma.roundProgress.findMany({
@@ -791,22 +824,28 @@ export class MissionsService {
 
         // Update mission participation status if all rounds completed
         if (allRoundsCompleted) {
-          await prisma.missionParticipation.update({
-            where: { id: roundProgress.participation.id },
-            data: {
-              status: 'COMPLETED',
-              completed_at: new Date(),
+          const imageUrl =
+            await this.cloudinaryService.uploadImage(certificateDataUri);
+          const updateMissionParticipation = prisma.missionParticipation.update(
+            {
+              where: { id: roundProgress.participation.id },
+              data: {
+                status: 'COMPLETED',
+                completed_at: new Date(),
+              },
             },
-          });
+          );
 
-          await this.suiService.mintCertificate({
+          const mintCertificate = this.suiService.mintCertificate({
             completedAt: new Date(),
             description: roundProgress.participation.mission.brief,
-            imageUrl: 'd',
+            imageUrl: imageUrl,
             missionId: roundProgress.participation.mission.id,
             recipient: roundProgress.participation.user.wallet_address,
             title: roundProgress.participation.mission.title,
           });
+
+          await Promise.all([updateMissionParticipation, mintCertificate]);
         }
 
         return {
@@ -940,7 +979,11 @@ export class MissionsService {
     return participation;
   }
 
-  async getUserMissions(userId: string, page: number = 1, limit: number = 10) {
+  async getUserMissions(
+    userId: string,
+    page: number = 1,
+    limit: number = 1000,
+  ) {
     const skip = (page - 1) * limit;
 
     const [participations, total] = await Promise.all([
@@ -998,7 +1041,7 @@ export class MissionsService {
   async getMissionLeaderboard(
     missionId: string,
     page: number = 1,
-    limit: number = 10,
+    limit: number = 1000,
   ) {
     // Verify mission exists
     const mission = await this.prisma.mission.findUnique({

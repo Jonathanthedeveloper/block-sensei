@@ -57,6 +57,8 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("refresh_token");
         window.location.href = "/";
       }
+    } else {
+      console.log(error);
     }
 
     return Promise.reject(error);

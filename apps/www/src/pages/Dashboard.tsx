@@ -24,6 +24,7 @@ import Achievement from "../assets/achievement.png";
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
+  const { data: missionParticipations } = useGetUserParticipatedMissions();
 
   // Calculate user level based on block balance - fix for -Infinity
   const blockBalance = profile?.block_balance || 0;
@@ -45,6 +46,20 @@ export default function Dashboard() {
         )
       : 0;
 
+  console.log(missionParticipations);
+
+  const questCount = missionParticipations?.reduce((acc, participation) => {
+    const completedRounds = participation.round_progress.filter(
+      (round) => round.status === "COMPLETED"
+    ).length;
+    return acc + completedRounds || 0;
+  }, 0);
+
+  const certificateCount =
+    missionParticipations?.filter(
+      (participation) => participation.status === "COMPLETED"
+    ).length || 0;
+
   if (!profile) return null;
 
   const stats = [
@@ -59,14 +74,14 @@ export default function Dashboard() {
     },
     {
       title: "Quests Completed",
-      value: 2,
+      value: questCount,
       icon: <img src={Quest} alt="coin" className="w-5 h-5" />,
       color: "from-secondary-500 to-accent-500",
       change: "+5 this week",
     },
     {
-      title: "Achievements",
-      value: 2,
+      title: "Certificates Earned",
+      value: certificateCount,
       icon: <img src={Achievement} alt="coin" className="w-4 h-4" />,
       color: "from-accent-500 to-primary-500",
       change: "New badge unlocked!",
