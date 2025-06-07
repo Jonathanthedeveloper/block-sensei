@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { createCanvas, CanvasRenderingContext2D } from 'canvas';
-import * as crypto from 'crypto';
+import { createCanvas, CanvasRenderingContext2D } from '@napi-rs/canvas';
+import crypto from 'node:crypto';
 
 @Injectable()
 export class ImageGeneratorService {
@@ -31,14 +31,13 @@ export class ImageGeneratorService {
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('🎓 Certificate of Completion', width / 2, 150);
+    ctx.fillText('Certificate of Completion', width / 2, 150);
 
     // Mission title
     ctx.font = 'bold 36px Arial';
     ctx.fillText(missionTitle, width / 2, 250);
 
-   
-    return canvas.toBuffer('image/png');
+   return canvas.toBuffer('image/png');
   }
 
   private generateColorPair(input: string): [string, string] {

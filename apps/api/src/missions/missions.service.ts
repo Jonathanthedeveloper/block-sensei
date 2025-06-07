@@ -23,16 +23,7 @@ export class MissionsService {
     private readonly imageGeneratorService: ImageGeneratorService,
     private readonly cloudinaryService: CloudinaryService,
   ) {
-    const image = this.imageGeneratorService.generateCertificateImage(
-      '0x63b99eef88c80ba801084a1341cdcf48e71e8bace91e817800e08cbe13414e1a',
-      'mission title',
-    );
 
-    // Save the image to a file
-    fs.writeFileSync(
-      'certificate.txt',
-      `data:image/png;base64,${image.toString('base64')}`,
-    );
   }
 
   // Create mission with rounds and nested quests/rewards
