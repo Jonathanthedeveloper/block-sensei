@@ -1,18 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MissionForm from "@/components/mission/MissionForm";
 
 export default function CreateMissionPage() {
-  const navigate = useNavigate();
-  const { clanId, missionId } = useParams<{
+  const { clanId } = useParams<{
     clanId: string;
     missionId?: string;
   }>();
-
-  const isEditMode = !!missionId;
-
-  const handleCancel = () => {
-    navigate("/studio");
-  };
 
   if (!clanId) {
     return (

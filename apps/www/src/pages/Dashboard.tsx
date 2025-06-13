@@ -24,6 +24,7 @@ import Achievement from "../assets/achievement.png";
 
 export default function Dashboard() {
   const { data: profile } = useProfile();
+  const { data: missionParticipations } = useGetUserParticipatedMissions();
 
   // Calculate user level based on block balance - fix for -Infinity
   const blockBalance = profile?.block_balance || 0;
@@ -45,6 +46,20 @@ export default function Dashboard() {
         )
       : 0;
 
+  console.log(missionParticipations);
+
+  const questCount = missionParticipations?.reduce((acc, participation) => {
+    const completedRounds = participation.round_progress.filter(
+      (round) => round.status === "COMPLETED"
+    ).length;
+    return acc + completedRounds || 0;
+  }, 0);
+
+  const certificateCount =
+    missionParticipations?.filter(
+      (participation) => participation.status === "COMPLETED"
+    ).length || 0;
+
   if (!profile) return null;
 
   const stats = [
@@ -53,75 +68,74 @@ export default function Dashboard() {
       value: profile.mission_participations.filter(
         (participation) => participation.status === "COMPLETED"
       ).length,
-      icon: <img src={Mission} alt='coin' className='w-5 h-5' />,
+      icon: <img src={Mission} alt="coin" className="w-5 h-5" />,
       color: "from-primary-500 to-secondary-500",
       change: "+2 this week",
     },
     {
       title: "Quests Completed",
-      value: 2,
-      icon: <img src={Quest} alt='coin' className='w-5 h-5' />,
+      value: questCount,
+      icon: <img src={Quest} alt="coin" className="w-5 h-5" />,
       color: "from-secondary-500 to-accent-500",
       change: "+5 this week",
     },
     {
-      title: "Achievements",
-      value: 2,
-      icon: <img src={Achievement} alt='coin' className='w-4 h-4' />,
+      title: "Certificates Earned",
+      value: certificateCount,
+      icon: <img src={Achievement} alt="coin" className="w-4 h-4" />,
       color: "from-accent-500 to-primary-500",
       change: "New badge unlocked!",
     },
     {
       title: "BLOCK Earned",
-      value: 2,
-      icon: <img src={Coin} alt='coin' className='w-4 h-4' />,
+      value: formatNumber(profile.block_balance),
+      icon: <img src={Coin} alt="coin" className="w-4 h-4" />,
       color: "from-success-500 to-primary-500",
-      change: "+300 today",
     },
   ];
 
   return (
-    <div className='space-y-6'>
+    <div className="space-y-6">
       {/* Header with Level Progress */}
-      <div className='relative'>
-        <motion.div className='absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 opacity-10 rounded-lg to-accent-500' />
-        <div className='relative p-6 rounded-lg'>
-          <div className='flex justify-between items-start mb-4'>
+      <div className="relative">
+        <motion.div className="absolute inset-0 bg-gradient-to-r from-primary-500 via-secondary-500 opacity-10 rounded-lg to-accent-500" />
+        <div className="relative p-6 rounded-lg">
+          <div className="flex justify-between items-start mb-4">
             <div>
               <motion.h1
-                className='flex items-start gap-2 font-bold text-gray-900 text-md dark:text-white sm:text-2xl'
+                className="flex items-start gap-2 font-bold text-gray-900 text-md dark:text-white sm:text-2xl"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
                 <span>Welcome back, Sui Explorer</span>
-                <Badge variant='primary' className='text-sm shrink-0'>
+                <Badge variant="primary" className="text-sm shrink-0">
                   Level {userLevel}
                 </Badge>
               </motion.h1>
-              <p className='mt-1 text-gray-600 dark:text-gray-300'>
+              <p className="mt-1 text-gray-600 dark:text-gray-300">
                 Your Sui adventure continues...
               </p>
             </div>
-            <div className='flex items-center gap-2 shrink-0'>
-              <Star className='size-4 sm:size-5 text-yellow-500' />
-              <span className='font-bold text-gray-900 dark:text-white text-xs sm:text-lg shrink-0'>
+            <div className="flex items-center gap-2 shrink-0">
+              <Star className="size-4 sm:size-5 text-yellow-500" />
+              <span className="font-bold text-gray-900 dark:text-white text-xs sm:text-lg shrink-0">
                 {formatNumber(profile.block_balance)} XP
               </span>
             </div>
           </div>
 
-          <div className='relative'>
-            <div className='flex justify-between items-center mb-2'>
-              <span className='font-medium text-gray-600 dark:text-gray-400 text-sm'>
+          <div className="relative">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-medium text-gray-600 dark:text-gray-400 text-sm">
                 Progress to Level {userLevel + 1}
               </span>
-              <span className='font-medium text-gray-900 dark:text-white text-sm'>
+              <span className="font-medium text-gray-900 dark:text-white text-sm">
                 {Math.round(levelProgress)}%
               </span>
             </div>
-            <Progress value={levelProgress} variant='primary' className='h-3' />
-            <div className='mt-2 text-gray-500 dark:text-gray-400 text-xs'>
+            <Progress value={levelProgress} variant="primary" className="h-3" />
+            <div className="mt-2 text-gray-500 dark:text-gray-400 text-xs">
               {formatNumber(nextLevelPoints - profile.block_balance)} XP needed
               for next level
             </div>
@@ -131,7 +145,7 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <motion.div
-        className='gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+        className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -144,12 +158,12 @@ export default function Dashboard() {
             transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
             whileHover={{ scale: 1.02 }}
           >
-            <Card className='group relative overflow-hidden'>
+            <Card className="group relative overflow-hidden h-full">
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
               />
-              <CardContent className='p-6'>
-                <div className='flex items-center gap-4'>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
                   <div
                     className={cn(
                       "p-3 rounded-xl transition-transform duration-300 group-hover:scale-110",
@@ -159,13 +173,13 @@ export default function Dashboard() {
                     {stat.icon}
                   </div>
                   <div>
-                    <p className='text-gray-500 dark:text-gray-400 text-sm'>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
                       {stat.title}
                     </p>
-                    <p className='font-bold text-gray-900 dark:text-white text-2xl'>
+                    <p className="font-bold text-gray-900 dark:text-white text-2xl">
                       {stat.value}
                     </p>
-                    <p className='mt-1 text-primary-500 dark:text-primary-400 text-xs'>
+                    <p className="mt-1 text-primary-500 dark:text-primary-400 text-xs">
                       {stat.change}
                     </p>
                   </div>

@@ -11,12 +11,27 @@ import { MissionsModule } from './missions/missions.module';
 import { SuiModule } from './sui/sui.module';
 import { UploadModule } from './upload/upload.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ImageGeneratorModule } from './image-generator/image-generator.module';
+import joi from 'joi';
 
 @Module({
   imports: [
     CacheModule.register(),
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: joi.object({
+        PORT: joi.number().optional(),
+        CORS_ORIGIN: joi.string().default('*'),
+        JWT_SECRET: joi.string().required(),
+        CLOUDINARY_CLOUD_NAME: joi.string().required(),
+        CLOUDINARY_API_KEY: joi.string().required(),
+        CLOUDINARY_API_SECRET: joi.string().required(),
+        DATABASE_URL: joi.string().required(),
+        SUI_PACKAGE_ID: joi.string().required(),
+        SUI_ADMIN_CAPABILITY_ID: joi.string().required(),
+        SUI_TREASURY_CAPABILITY_ID: joi.string().required(),
+        PRIVATE_KEY: joi.string().required(),
+      }),
     }),
     PrismaModule.forRoot({
       isGlobal: true,
@@ -28,6 +43,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     SuiModule,
     UploadModule,
     CloudinaryModule,
+    ImageGeneratorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
