@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardHeader, CardContent } from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
@@ -23,6 +23,7 @@ import { useWithdrawBlock } from "@/features/profile/useWithdrawBlock";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const withdrawSchema = z.object({
   amount: z.coerce.number().min(1, "Amount must be greater than 0"),
@@ -55,8 +56,9 @@ export default function ProfilePage() {
     },
   ];
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(profile.wallet_address);
+  const copyAddress = async () => {
+    await navigator.clipboard.writeText(profile.wallet_address);
+    toast.success("Address copied to clipboard")
   };
 
   const handleLogout = () => {
@@ -252,13 +254,21 @@ function WithdrawBlockModal() {
         onSuccess: () => {
           setOpen(false);
           form.reset();
+          toast.success("Withdrawal successful! BLOCK sent.");
         },
         onError: (error) => {
           console.error("Withdrawal error:", error);
+          toast.error(`Withdrawal failed: ${error.message}`);
         },
       }
     );
   }
+
+  useEffect(()=> {
+    if(!open) {
+      form.reset();
+    }
+  }, [open, form])
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>

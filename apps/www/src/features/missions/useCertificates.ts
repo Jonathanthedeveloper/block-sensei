@@ -41,8 +41,6 @@ export function useCertificates() {
               content?.dataType === "moveObject" ? content.fields : null;
             const display = obj.data?.display?.data || {};
 
-            console.log("Certificate object:", obj);
-
             return {
               id: obj.data?.objectId || "",
               title: fields?.name || display?.name || "Certificate",

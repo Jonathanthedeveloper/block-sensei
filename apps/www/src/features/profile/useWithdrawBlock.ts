@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
+  useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 
@@ -14,6 +15,7 @@ export function useWithdrawBlock() {
   const account = useCurrentAccount();
   const queryClient = useQueryClient();
   const signAndExecuteTransaction = useSignAndExecuteTransaction();
+  const client = useSuiClient();
 
   return useMutation({
     mutationFn: async ({ amount, recipientAddress }: WithdrawBlockParams) => {
@@ -29,7 +31,17 @@ export function useWithdrawBlock() {
         // Convert amount to blockchain format
         const amountInSmallestUnit = amount * 1_000_000_000;
 
-        const [newCoin] = tx.splitCoins(import.meta.env.VITE_BLOCK_COIN_OBJECT_ID,[amountInSmallestUnit])
+        const coins = await client.getCoins({
+          owner: account.address,
+          coinType: import.meta.env.VITE_BLOCK_COIN_TYPE,
+          limit: 1,
+        });
+
+        if (coins.data.length === 0) {
+          throw new Error("No BLOCK coins found in wallet");
+        }
+
+        const [newCoin] = tx.splitCoins(coins.data[0].coinObjectId,[amountInSmallestUnit])
 
        tx.transferObjects([newCoin], recipientAddress);
 
