@@ -19,6 +19,7 @@ export const useCompleteRound = (options?: { onSuccess?: () => void }) => {
       queryClient.invalidateQueries({ queryKey: ["missionProgress"] });
       queryClient.invalidateQueries({ queryKey: ["missionLeaderboard"] });
       queryClient.invalidateQueries({ queryKey: ["userMissions"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
       options?.onSuccess?.();
     },
   });
