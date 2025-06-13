@@ -52,7 +52,10 @@ SUI_ADMIN_CAPABILITY_ID=your_admin_capability_id
 
 Required environment variables for frontend (apps/www/.env):
 ```
-VITE_API_URL=http://localhost:3000
+VITE_ENOKI_API_KEY=
+VITE_GOOGLE_CLIENT_ID=
+VITE_BASE_API_URL=
+VITE_BLOCK_COIN_TYPE=
 ```
 
 ### Smart Contract Deployment
@@ -100,45 +103,6 @@ pnpm build:www
 ### Deployment
 
 ```bash
-# Deploy the API with Prisma migrations
 pnpm deploy:api
-```bash
-# Deploy the API with Prisma migrations
-## Features
 
-- **Authenticated Learning**: Secure user authentication with Sui wallet integration
-- **Clan System**: Join or create clans with custom logos and descriptions to compete with other users
-- **Mission System**: Create and complete various mission types with customizable rounds and quests
-- **Quiz System**: Create interactive quizzes as part of mission rounds
-- **Studio**: A content creation hub for clan owners to design educational content
-- **Blockchain Integration**: 
-  - Track progress and rewards on the Sui blockchain
-  - Earn on-chain badges for achievements
-  - Receive verifiable certificates for mission completion
-- **Media Integration**:
-  - Cloudinary integration for image uploads
-  - AI-powered image generation for content
-- **Leaderboards**: Compete with other users and clans on global and mission-specific leaderboards
-- **Profile Management**: Track personal progress and showcase earned achievements
-
-## Smart Contracts
-
-The project includes Sui Move smart contracts for:
-- Badge issuance and verification
-- Certificate management for completed missions
-- Block management for tracking user progress
-
-## Environment Setup
-
-The application requires several environment variables for proper configuration:
-- Database connection settings
-- Cloudinary API credentials
-- Sui blockchain package ID and admin capability
-- JWT settings for authentication
-
-## License
-
-[MIT](LICENSE)
-## License
-
-[MIT](LICENSE)
+```

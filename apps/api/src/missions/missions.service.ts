@@ -13,7 +13,6 @@ import { Prisma } from '@prisma/client';
 import { SuiService } from 'src/sui/sui.service';
 import { ImageGeneratorService } from 'src/image-generator/image-generator.service';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import fs from 'node:fs';
 
 @Injectable()
 export class MissionsService {
