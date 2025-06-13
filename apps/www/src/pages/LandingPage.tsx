@@ -4,11 +4,13 @@ import { Sword, Trophy, Users, Award } from "lucide-react";
 import { useAccounts, ConnectButton } from "@mysten/dapp-kit";
 import { useLogin } from "@/features";
 import { useEffect } from "react";
-import Card from "@/components/card";
-import Card_img from "@/assets/card_img1.png";
-import Divider from "@/components/divider";
-import sui from "@/assets/sui.png";
-import Logo from "@/assets/Logo.png";
+
+
+// import Card from "../components/card";
+// import Card_img from "../assets/card_img1.png";
+// import Divider from "../components/divider";
+import sui from "../assets/sui.png";
+import Logo from "../assets/Logo.png";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -123,14 +125,21 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div
-              className="flex flex-col items-center gap-2 text-xs"
+              className='flex flex-col items-center gap-2 text-xl'
+
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Card forConnect imageUrl={Card_img} btn="Get Started" />
-              <h3 className="font-semibold">The Block Sensei Journey</h3>
-              <div className="flex flex-wrap items-center place-content-center gap-1 px-5 w-full text-accent">
+              <ConnectButton
+                connectText=' Start Now'
+                className='bg-gradient-to-r from-primary-500 to-secondary-500 shadow-md hover:shadow-xl px-6 py-3 rounded-2xl font-semibold text-white hover:scale-105 transition-all duration-300 ease-in-out transform'
+              />
+
+              {/* <Card forConnect imageUrl={Card_img} btn='Get Started' />
+              <h3 className='font-semibold'>The Block Sensei Journey</h3>
+              <div className='flex flex-wrap items-center place-content-center gap-1 px-5 w-full text-accent'>
+
                 <p>Basics</p>
                 <Divider />
                 <p> Do Web 3 Stuff</p>
@@ -138,7 +147,7 @@ export default function LandingPage() {
                 <p>Advanced</p>
                 <Divider />
                 <p>NFT Certificates</p>
-              </div>
+              </div> */}
             </motion.div>
           </motion.div>
         </div>
