@@ -37,7 +37,7 @@ export class ImageGeneratorService {
     ctx.font = 'bold 36px Arial';
     ctx.fillText(missionTitle, width / 2, 250);
 
-   return canvas.toBuffer('image/png');
+    return canvas.toBuffer('image/png');
   }
 
   private generateColorPair(input: string): [string, string] {
